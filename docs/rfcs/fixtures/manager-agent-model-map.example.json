@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "status": "example-only",
+  "description": "Default-off manager-agent role to model mapping fixture. This documents the staged runner contract and is not loaded by live chat routes.",
+  "manager": {
+    "provider": "openai-codex",
+    "model": "gpt-5.5",
+    "purpose": "Plan specialist work, choose specialists, and synthesize the final manager response."
+  },
+  "specialists": {
+    "coding": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "purpose": "Implement code changes, inspect the repository, run tests, and report changed files and risks."
+    },
+    "review_research": {
+      "provider": "gemini",
+      "model": "gemini-3.1-pro-preview",
+      "purpose": "Review contracts, research relevant docs/tests, identify edge cases, and assess implementation risk."
+    }
+  },
+  "non_goals": [
+    "Do not load this fixture in live chat routes.",
+    "Do not hardcode these model names in RuntimeAdapter or HttpRunnerClient.",
+    "Do not create real specialist agents from this fixture."
+  ]
+}

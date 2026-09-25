@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jinsoo Procedure Flex Preview</title>
+  <style>
+    :root{
+      --ink:#211a2a;--ink2:#35263f;--muted:#777081;--line:#e7ddeb;--line2:#d9c9e5;
+      --primary:#a875d6;--primaryDark:#7f35b6;--primaryDeep:#5e228f;--lav:#f7f1fb;--lav2:#efe4f8;
+      --soft:#fcfaff;--danger:#dc493a;--dangerSoft:#fff1ef;--ok:#16865a;
+      --shadow:0 8px 20px rgba(77,48,112,.08);--shadowSoft:0 2px 8px rgba(77,48,112,.05);
+      --r-lg:24px;--r-md:16px;--r-sm:11px;
+    }
+    *{box-sizing:border-box}
+    html{background:#f7f2fb}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f2fb;color:var(--ink);font-variant-numeric:tabular-nums}
+    .shell{max-width:1560px;margin:0 auto;padding:22px;display:grid;grid-template-columns:minmax(980px,1.65fr) minmax(330px,.62fr);gap:18px;align-items:start}
+    header{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;border:1px solid rgba(126,87,194,.22);border-radius:28px;padding:22px 24px;background:linear-gradient(135deg,#6f35a5,#b080d8);color:#fff;box-shadow:var(--shadow)}
+    header h1{margin:0;font-size:clamp(25px,3vw,42px);line-height:.98;letter-spacing:-.055em;font-weight:950}
+    .subtitle{margin:9px 0 0;max-width:760px;color:rgba(255,255,255,.88);font-size:14px;line-height:1.55}
+    .pill{justify-self:end;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.34);border-radius:999px;padding:10px 14px;font-weight:900;white-space:nowrap;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+    .pill::before{content:'Input → Preview → Save';display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.68);font-weight:800;margin-bottom:2px}
+
+
+
+    .salesPanel{grid-column:1/2;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;contain:layout paint style}.salesForm{display:block}.patientBar{display:grid;grid-template-columns:minmax(220px,1.5fr) repeat(4,minmax(120px,1fr));gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fcf9ff;align-items:end}.barTitle{align-self:center}.barTitle strong{display:block;font-size:18px;color:var(--primaryDeep);letter-spacing:-.025em}.salesMain{display:grid;grid-template-columns:minmax(560px,1fr) 390px;gap:14px;padding:14px}.cartPanel,.checkoutPanel{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden;contain:layout paint style}.cartHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px;border-bottom:1px solid var(--line);background:#fbf8ff}.cartHead h2,.checkoutHead h2{margin:2px 0 4px;font-size:25px;letter-spacing:-.045em}.cartHead p{margin:0;color:var(--muted);font-size:13px}.cartActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.miniCatalogActions{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff;flex-wrap:wrap}.cartList{padding:14px;display:grid;gap:12px;max-height:none}.cartList .procedureCard{margin:0}.checkoutPanel{padding:0;background:#21152a;color:#fff}.checkoutHead{padding:16px;border-bottom:1px solid rgba(255,255,255,.13)}.checkoutHead h2{color:#fff}.checkoutPanel label{color:#e7dcef}.totalStack{display:grid;gap:8px;padding:14px;border-bottom:1px solid rgba(255,255,255,.13)}.totalStack>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px}.totalStack span{color:#cdbbdd;font-size:12px;font-weight:900}.totalStack strong{font-size:18px}.totalStack input{max-width:145px;background:#fff;color:var(--ink)}.netRow strong{font-size:25px;color:#fff}.paymentBlock,.followBlock,.settingsDrop{padding:14px;border-bottom:1px solid rgba(255,255,255,.13)}.blockHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.checkoutPanel h3{margin:0 0 10px;font-size:15px;color:#fff}.checkoutPanel .paymentRow{background:#2b1c36;border-color:rgba(255,255,255,.16);box-shadow:none}.checkoutPanel .calcNote{background:#2b1c36;border-color:rgba(255,255,255,.16);color:#eadff2}.checkoutPanel .moneySummary{color:#fff}.twoCols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.followBlock textarea{min-height:68px}.settingsDrop summary{cursor:pointer;font-weight:950;color:#fff;margin-bottom:10px}.settingsDrop .hint{color:#d1c0dc}.smallActions{margin:10px 0!important;padding:0!important;border:0!important}.sendBar{padding:14px;display:grid;gap:9px}.sendBar .status{margin:0;color:#ddd}.sendBar .status.ok{color:#91efc1}.sendBar .status.err{color:#ffb8ae}.previewPanel{grid-column:2/3}.previewPanel .previewWrap{min-height:calc(100vh - 250px);display:grid;place-items:start center}.codebox{display:none;background:#17131d;color:#efe7f5;border-radius:16px;padding:14px;white-space:pre-wrap;overflow:auto;max-height:260px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+
+    .posPanel{grid-column:1/2;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;contain:layout paint style}.posHeader{padding:18px 20px 12px;border-bottom:1px solid var(--line);background:#fcf9ff}.posHeader h2{margin:2px 0 4px;font-size:26px;letter-spacing:-.045em}.posHeader p{margin:0;color:var(--muted);font-size:13px}.posForm{padding:0;display:block}.posCanvas{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;padding:16px}.posBoard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(124px,1fr);gap:12px}.posTile{border:1px solid var(--line);border-radius:22px;background:#fbf8ff;color:var(--ink);padding:18px;text-align:left;cursor:pointer;display:grid;align-content:space-between;min-height:124px;box-shadow:var(--shadowSoft)}.posTile:hover{border-color:#c6add9;background:#f7effd}.posTile span{font-size:11px;letter-spacing:.14em;color:#9b80b3;font-weight:950}.posTile strong{display:block;font-size:24px;letter-spacing:-.045em;color:var(--primaryDeep)}.posTile small{display:block;color:var(--muted);font-size:13px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.procedureTile{grid-row:span 2;background:#f4eafa}.procedureTile strong{font-size:32px}.paymentTile strong{color:var(--primaryDark)}.settingsTile{background:#fff}.orderSummary{border:1px solid #d8c7e5;border-radius:22px;background:#21152a;color:#fff;padding:16px;display:grid;gap:14px;align-content:start;min-height:100%}.orderSummary h3{margin:2px 0 4px;font-size:22px;letter-spacing:-.04em}.orderSummary p{margin:0;color:#d7c8e3;font-size:13px}.summaryRows{display:grid;gap:8px}.summaryRows div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.12);padding:8px 0}.summaryRows span{color:#c9b8d7;font-size:12px;font-weight:850}.summaryRows strong{font-size:14px;text-align:right}.posSendRow{display:grid;grid-template-columns:1fr;gap:8px}.orderSummary .status{margin:0;color:#d8cce3}.orderSummary .status.ok{color:#8ff0c0}.orderSummary .status.err{color:#ffb7ad}.posModal{border:0;padding:0;background:transparent;width:min(980px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:visible}.posModal::backdrop{background:rgba(20,12,30,.55)}.wideModal{width:min(1180px,calc(100vw - 24px))}.modalBox{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 14px 46px rgba(26,14,38,.2);padding:0;max-height:calc(100vh - 28px);overflow:auto}.modalHead{position:sticky;top:0;background:#fff;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}.modalHead h3{margin:0;font-size:24px;letter-spacing:-.04em}.modalClose{border:1px solid var(--line);background:#f8f2fc;color:var(--primaryDeep);border-radius:14px;width:42px;height:42px;font-size:25px;font-weight:950;cursor:pointer}.modalGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px}.patientGrid{grid-template-columns:repeat(4,minmax(0,1fr))}.posModal .modalBox>div:not(.modalHead):not(.modalFooter):not(.titleActions):not(.actions),.posModal .modalBox>#procedures,.posModal .modalBox>#payments{margin:16px}.posModal .titleActions{padding:14px 16px;border-bottom:1px solid var(--line);justify-content:flex-start}.modalFooter{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:14px 16px;display:flex;justify-content:flex-end}.modalUtility{margin:12px 0 0!important;padding:0!important;border:0!important;justify-content:flex-start}.posModal .codebox{display:none;margin-top:12px}.previewPanel{grid-column:2/3}.previewPanel .previewWrap{min-height:calc(100vh - 260px);display:grid;place-items:start center}.panel{contain:layout paint style}
+
+    .dashboard{grid-column:1/-1;display:grid;grid-template-columns:minmax(240px,1.25fr) repeat(5,minmax(140px,1fr));gap:10px;align-items:stretch}
+    .dashIntro,.metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 14px;box-shadow:var(--shadowSoft);contain:layout paint style}
+    .dashIntro{display:grid;align-content:center;gap:4px;background:#fbf8ff;border-color:#dac8e8}
+    .eyebrow,.metricLabel{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:950;color:#9278a8;margin-bottom:4px}
+    .dashIntro strong{font-size:17px;line-height:1.2;color:var(--primaryDeep)}.dashIntro small,.metric small{display:block;color:var(--muted);font-size:12px;line-height:1.35;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .metric strong{display:block;font-size:18px;line-height:1.12;color:var(--ink2);letter-spacing:-.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.moneyMetric strong{color:var(--primaryDark)}.patientMetric strong{color:var(--primaryDeep)}
+    .panel h2 .panelKicker{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a596b1;font-weight:950;margin-bottom:3px}.panel h2 span{display:block}.panel h2{gap:16px}.panel h2::after{content:'JINSOO OPS';margin-left:auto;white-space:nowrap}
+    .calcNote{grid-column:1/-1;background:#fbf8ff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;color:#62516e;font-size:13px;font-weight:800;line-height:1.45}.moneySummary{color:var(--primaryDark);font-weight:950}.bottomAddLine{grid-column:1/-1;display:flex;justify-content:flex-end}.hint{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.4}.toggleLine{display:flex;align-items:center;gap:9px;background:#fbf8ff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}.toggleLine input{width:auto;min-height:auto}.primaryMini{background:#f3e8fb;color:var(--primaryDeep);border-color:#d9c1ec}.codebox{grid-column:1/-1;display:none;background:#17131d;color:#efe7f5;border-radius:16px;padding:14px;white-space:pre-wrap;overflow:auto;max-height:360px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+
+    .panel{background:rgba(255,255,255,.91);border:1px solid rgba(115,80,145,.16);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;}
+    .panel h2{margin:0;padding:16px 20px;border-bottom:1px solid var(--line);font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#fff,#fcf9ff)}
+    .panel h2::after{content:'JINSOO OPS';font-size:10px;letter-spacing:.14em;color:#a596b1;font-weight:900}
+    .panel:nth-of-type(2){}
+    .form{padding:18px 20px 20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .form>div:not(.wide):not(.sectionTitle){min-width:0}.form>div:nth-child(1),.form>div:nth-child(2),.form>div:nth-child(3),.form>div:nth-child(4){grid-column:span 1}
+    .wide{grid-column:1/-1}
+    label{display:block;font-size:11px;font-weight:900;color:#594968;margin-bottom:5px;letter-spacing:.015em}
+    input,select,textarea{width:100%;border:1px solid #d8cbe5;border-radius:var(--r-sm);background:#fff;padding:9px 10px;font:inherit;outline:none;min-height:40px;color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.6);transition:border-color .08s,background .08s}
+    textarea{resize:vertical;min-height:80px;line-height:1.45}
+    input:hover,select:hover,textarea:hover{border-color:#c5aed8;background:#fffefd}
+    input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(168,117,214,.12)}
+    .sectionTitle{grid-column:1/-1;margin-top:8px;padding-top:16px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+    .sectionTitle h3{margin:0;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--primaryDeep)}
+    .sectionTitle h3::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--primary);margin-right:8px;vertical-align:1px}
+    .titleActions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.titleBtn{border:1px solid #d8cdec;background:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;cursor:pointer;min-height:32px;color:#6b4e9a;box-shadow:0 1px 0 rgba(0,0,0,.02)}.titleBtn:hover{background:#faf6ff;border-color:#c7acd8}
+    .catalogBackdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(18,12,30,.48);z-index:40}.catalogBackdrop.open{display:flex}.catalogModal{width:min(520px,100%);background:#fff;border:1px solid #e6d9f1;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.28);padding:18px 18px 16px}.catalogModalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.catalogModalHead h3{margin:0;font-size:20px}.catalogClose{border:0;background:#f3ecfb;color:#6a4ea0;border-radius:12px;width:38px;height:38px;font-size:22px;line-height:1;cursor:pointer;font-weight:900}.catalogHelp{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.45}.catalogModalActions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px}.catalogSavedList{display:none;margin-top:12px;border-top:1px dashed var(--line);padding-top:12px;max-height:300px;overflow:auto}.catalogSavedList.open{display:grid;gap:8px}.catalogSavedEmpty{color:var(--muted);font-size:13px;background:#faf8fc;border:1px solid #eee4f6;border-radius:12px;padding:10px}.catalogSavedRow{display:grid;grid-template-columns:1fr 46px;gap:8px;align-items:end}.catalogSavedRow input{min-height:38px}.catalogDeleteBtn{border:0;background:#fff0f0;color:var(--danger);border-radius:12px;min-height:38px;font-weight:900;cursor:pointer}.catalogDeleteBtn:hover{background:#ffe4e4}
+    .procedureCard{grid-column:1/-1;background:linear-gradient(180deg,#fff,#fefcff);border:1px solid var(--line);border-radius:18px;padding:14px;margin:0 0 12px;box-shadow:var(--shadowSoft);position:relative}.procedureCard::before{content:'';position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--primary),#dbc3f0)}
+    .procHead{display:grid;grid-template-columns:minmax(160px,1.45fr) .55fr .52fr .72fr .62fr .75fr 52px;gap:10px;align-items:end;padding-left:5px}.areaList{display:grid;gap:8px;margin:12px 0 0 18px;padding-left:14px;border-left:1px dashed #dfd0ea}.areaRow{display:grid;grid-template-columns:minmax(150px,1.55fr) .55fr .48fr .75fr 42px;gap:8px;align-items:end}.areaAddLine{margin:10px 0 0 32px}.unitChip{min-height:40px;border:1px solid #dfd0ea;border-radius:var(--r-sm);background:var(--lav);display:flex;align-items:center;padding:9px 10px;font-weight:900;color:#68409b}.miniBtn{border:1px solid #d1b9e2;background:linear-gradient(180deg,#fff,#f7effc);color:#7133a4;border-radius:var(--r-sm);min-height:40px;padding:8px 10px;font-weight:950;cursor:pointer}.miniBtn:hover{background:#f4eafa}.miniBtn.remove,.removeProc{border-color:#f0bbb5;background:var(--dangerSoft);color:var(--danger)}
+    .paymentRow{display:grid;grid-template-columns:minmax(90px,.8fr) minmax(150px,1.2fr) 42px;gap:8px;align-items:end;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:var(--shadowSoft)}
+    .totals{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;background:linear-gradient(180deg,#f9f3fd,#fff);border:1px solid var(--line);border-radius:18px;padding:12px;margin-top:2px}.totalItem{display:grid;gap:3px}.totalLabel{font-size:11px;color:var(--muted);font-weight:900}.totalValue{font-size:15px;color:var(--ink2);font-weight:950}.totalValue.accent{color:var(--primaryDark)}
+    .actions{grid-column:1/-1;display:flex;gap:9px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin:6px -20px -20px;padding:14px 20px;background:rgba(255,255,255,.93);border-top:1px solid var(--line);}.btn{border:1px solid #d5c3e3;border-radius:999px;padding:10px 14px;font-weight:950;cursor:pointer;min-height:42px}.btn.primary{background:linear-gradient(135deg,var(--primaryDark),var(--primary));border-color:transparent;color:#fff;box-shadow:none}.btn.secondary{background:#fff;color:#6a4ea0}.btn.danger{background:#fff7f5;border-color:#efb7b0;color:var(--danger)}.btn:disabled{opacity:.6;cursor:not-allowed}.status{margin-right:auto;font-size:13px;font-weight:900;line-height:1.35}.status.ok{color:var(--ok)}.status.err{color:var(--danger)}.jsonBox{grid-column:1/-1;display:none;background:#17131d;color:#efe7f5;border-radius:16px;padding:14px;white-space:pre-wrap;overflow:auto;max-height:360px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+    .previewWrap{padding:18px;background:linear-gradient(180deg,#fff,#fbf8fd)}.phone{width:min(340px,100%);margin:0 auto;background:linear-gradient(180deg,#17151a,#050506);border-radius:38px;padding:12px;box-shadow:0 12px 30px rgba(0,0,0,.18)}.screen{background:#eef5fb;border-radius:29px;padding:14px;min-height:660px;overflow:auto}.chatHead{font-weight:950;text-align:center;color:#51606d;margin-bottom:14px;font-size:13px}.flexCard{width:307px;margin:0 auto;background:#fff;border:1px solid #e2dde6;border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}.cardHeader{display:none}.messageSectionTitle{font-size:18px;font-weight:950;color:#5e228f;text-align:center;margin:12px 0 10px;padding-bottom:8px;border-bottom:2px solid #eadcf4}.serviceDateBlock{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;margin-bottom:10px;background:#faf7fd;border:1px solid #eadcf4;border-radius:10px;color:#6b6174;font-size:13px;font-weight:850}.serviceDateBlock strong{color:#5f3b80;font-size:15px}.customerBlock{margin:0 0 12px;padding:10px 12px;background:#f7f0fc;border-left:4px solid #a875d6;border-radius:10px}.customerBlockLabel{font-size:11px;font-weight:900;color:#9876aa;text-transform:uppercase;letter-spacing:.08em}.customerBlockName{font-size:20px;font-weight:950;color:#302039;margin-top:2px}.treatmentGroup{margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid #f1edf3}.treatmentGroup:last-of-type{border-bottom:0}.treatmentMainRow,.treatmentDetailRow{display:grid;grid-template-columns:5fr 2fr 4fr;gap:7px;align-items:start}.treatmentMainRow{margin-bottom:3px}.treatmentTitle,.treatmentQty{font-size:15.5px;font-weight:950;color:#151219;line-height:1.32;min-width:0}.treatmentQty{text-align:right;white-space:nowrap}.treatmentPrice{font-size:15.5px;font-weight:950;color:var(--primaryDark);text-align:right;white-space:nowrap;line-height:1.32}.treatmentChips{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0 2px}.treatmentChip{background:#f6f0fb;border:1px solid #eadff2;border-radius:999px;color:#6c3ba3;font-size:11.5px;font-weight:950;line-height:1.2;padding:4px 8px}.statusChip{font-size:11.5px;font-weight:950;white-space:nowrap;text-align:right}.statusKeep{color:#8d22c4}.statusDone{color:#e84a3a}.treatmentDetailLabel,.treatmentDetailQty,.treatmentDetailBlank{font-size:13.5px;font-weight:600;color:#69717f;line-height:1.4;margin:1px 0}.treatmentDetailQty{text-align:right;white-space:nowrap}.paymentBox{margin-top:18px;min-height:82px;background:#f8f8fa;border:1px solid #eeeaf0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px}.paymentMain{font-size:16px;font-weight:900;color:#55555c;line-height:1.3;margin-bottom:8px;text-align:center}.paymentDiscount{font-size:12px;font-weight:800;color:#8d63ca;line-height:1.35;text-align:center;margin:-2px 0 7px}.paymentSub{font-size:14px;font-weight:800;color:#b78bdc;line-height:1.3;text-align:center}.paymentMethodList{display:grid;gap:4px;width:100%;margin-top:5px;padding-top:7px;border-top:1px solid #e8e3ec}.paymentMethodRow{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:850;color:#55555c}.paymentMethodAmount{color:#7d4ead;white-space:nowrap}.followSection{margin:14px 0 18px;padding:14px 16px 13px;background:#F1F8F7;border:1px solid #C9E3DF;border-radius:10px;box-shadow:none}.followTitle{font-size:18px;font-weight:700;color:#176B67;line-height:1.4;margin-bottom:8px;text-align:center}.followRow{display:block;margin:0;text-align:center}.followDate{font-size:16px;font-weight:600;color:#1F2933;line-height:1.5;white-space:normal}.followRule{margin:10px 0 9px;text-align:center;color:#A7C9C5;font-size:13px;line-height:1}.openingHoursTitle{font-size:15px;font-weight:600;color:#66737D;line-height:1.5;text-align:center}.openingHours{font-size:16px;font-weight:700;color:#176B67;line-height:1.5;margin-top:1px;text-align:center}.followNote,.followWarning{display:none}
+
+    .panel,.procedureCard,.paymentRow,.phone,.flexCard{contain:layout paint style}
+    @media (prefers-reduced-motion: reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+    @media(max-width:1180px){.shell{grid-template-columns:1fr}.salesPanel,.previewPanel{grid-column:1/-1}.patientBar{grid-template-columns:repeat(2,minmax(0,1fr))}.barTitle{grid-column:1/-1}.salesMain{grid-template-columns:1fr}.checkoutPanel{background:#fff;color:var(--ink)}.checkoutHead h2,.checkoutPanel h3{color:var(--ink)}.checkoutPanel label{color:#594968}.checkoutPanel .paymentRow,.checkoutPanel .calcNote{background:#fff;border-color:var(--line);color:var(--ink)}.checkoutPanel .paymentRow{grid-template-columns:minmax(90px,.8fr) minmax(160px,1.2fr) 42px}.checkoutPanel .moneySummary,.netRow strong{color:var(--primaryDark)}.posPanel,.previewPanel{grid-column:1/-1}.posCanvas{grid-template-columns:1fr}.orderSummary{min-height:auto}.posBoard{grid-template-columns:repeat(2,minmax(0,1fr))}.patientGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard{grid-template-columns:repeat(2,minmax(0,1fr))}.dashIntro{grid-column:1/-1}.panel:nth-of-type(2){position:static}.form{grid-template-columns:repeat(2,minmax(0,1fr))}.form>div:nth-child(1),.form>div:nth-child(2),.form>div:nth-child(3),.form>div:nth-child(4){grid-column:span 1}}
+    @media(max-width:760px){.shell{padding:12px;gap:12px}.patientBar{grid-template-columns:1fr;padding:12px}.salesMain{padding:12px}.cartHead{display:grid}.cartActions{justify-content:stretch}.cartActions .btn{flex:1}.twoCols{grid-template-columns:1fr}.posCanvas{padding:12px}.posBoard{grid-template-columns:1fr}.procedureTile{grid-row:auto}.posTile,.procedureTile{min-height:104px}.posTile strong,.procedureTile strong{font-size:24px}.modalGrid,.patientGrid{grid-template-columns:1fr;padding:12px}.posModal .modalBox>div:not(.modalHead):not(.modalFooter):not(.titleActions):not(.actions),.posModal .modalBox>#procedures,.posModal .modalBox>#payments{margin:12px}.modalHead{padding:12px}.modalHead h3{font-size:21px}.dashboard{grid-template-columns:1fr}.dashIntro,.metric{border-radius:15px;padding:12px}header{grid-template-columns:1fr;border-radius:22px;padding:18px}.pill{justify-self:start}.form{grid-template-columns:1fr;padding:14px}.form>div:nth-child(1),.form>div:nth-child(2),.form>div:nth-child(3),.form>div:nth-child(4){grid-column:auto}.sectionTitle{grid-template-columns:1fr}.titleActions{justify-content:flex-start}.procHead,.areaRow,.paymentRow,.totals{grid-template-columns:1fr}.procHead .removeProc,.areaRow .miniBtn,.paymentRow .miniBtn{grid-column:1/-1}.areaList,.areaAddLine{margin-left:0;padding-left:0;border-left:0}.actions{margin:6px -14px -14px;justify-content:stretch}.actions .btn{flex:1 1 auto}.status{width:100%;margin-right:0}.phone{width:100%}.screen{padding:12px;min-height:620px}.flexCard{width:100%}}
+  
+
+    /* Jinsoo Dark Luxury Clinic Ops v3 — premium, readable, no cyberpunk */
+    :root{
+      --ink:#f8f1ff;--ink2:#fffaff;--muted:#b9a8c8;--line:rgba(226,205,239,.16);--line2:rgba(214,180,106,.22);
+      --primary:#b48ed7;--primaryDark:#9d6bc6;--primaryDeep:#f2dcff;--lav:#20162a;--lav2:#2a1d36;
+      --soft:#130e1a;--danger:#ff7668;--dangerSoft:rgba(255,118,104,.12);--ok:#71e2ad;
+      --gold:#d6b46a;--goldSoft:rgba(214,180,106,.13);--surface:#17101f;--surface2:#20162a;
+      --shadow:0 18px 44px rgba(0,0,0,.34);--shadowSoft:0 8px 22px rgba(0,0,0,.22);
+    }
+    html{background:#0f0a17;color-scheme:dark}
+    body{background:radial-gradient(circle at 12% -6%,rgba(180,142,215,.16),transparent 34rem),radial-gradient(circle at 92% 3%,rgba(214,180,106,.12),transparent 30rem),linear-gradient(180deg,#0d0914 0%,#130e1a 48%,#0b0810 100%);color:var(--ink)}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(180deg,rgba(255,255,255,.026) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(180deg,rgba(0,0,0,.75),transparent 82%);opacity:.5}
+    .shell{max-width:1640px;padding:24px;gap:16px;grid-template-columns:minmax(980px,1.68fr) minmax(345px,.62fr)}
+    header{position:relative;overflow:hidden;background:linear-gradient(135deg,#15101d 0%,#2a1d36 54%,#5b3a78 100%);border-color:rgba(226,205,239,.16);box-shadow:0 18px 46px rgba(0,0,0,.34)}
+    header::after{content:'';position:absolute;inset:auto -10% -70% 35%;height:178%;background:radial-gradient(circle,rgba(214,180,106,.20),transparent 62%);transform:rotate(-12deg);pointer-events:none}
+    header h1{position:relative;color:#fff;font-weight:850;letter-spacing:-.065em;text-shadow:0 1px 0 rgba(255,255,255,.06)}.subtitle{position:relative;color:#ded0eb;font-size:14.5px;line-height:1.62}.pill{position:relative;background:rgba(255,255,255,.075);border-color:rgba(226,205,239,.20);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}.pill::before{color:rgba(214,180,106,.82)}
+    .dashboard{gap:10px}.dashIntro,.metric,.salesPanel,.cartPanel,.previewPanel,.panel{background:rgba(23,16,31,.92)!important;border-color:var(--line)!important;box-shadow:var(--shadow)!important;color:var(--ink)}.dashIntro,.metric{background:linear-gradient(180deg,rgba(32,22,42,.96),rgba(23,16,31,.94))!important;box-shadow:var(--shadowSoft)!important}.dashIntro{border-color:rgba(214,180,106,.18)!important}.eyebrow,.metricLabel,.panelKicker{color:var(--gold)!important}.dashIntro strong,.barTitle strong,.patientMetric strong,.cartHead h2,.checkoutHead h2,.posHeader h2,.panel h2{color:#fff!important}.moneyMetric strong{color:#ead08c!important}.metric strong{color:#fff}.dashIntro small,.metric small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.42;color:var(--muted)}
+    .patientBar,.cartHead,.miniCatalogActions,.posHeader,.panel h2{background:linear-gradient(180deg,rgba(32,22,42,.96),rgba(23,16,31,.96))!important;border-color:var(--line)!important}.salesMain{background:rgba(10,7,15,.25)}.cartHead p,.posHeader p,.hint{color:var(--muted)}
+    label{color:#d9c8e8!important}input,select,textarea{background:#100b18!important;border-color:rgba(226,205,239,.18)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);transition:border-color .1s ease,box-shadow .1s ease,background .1s ease}input::placeholder,textarea::placeholder{color:#7e6b8d}input:hover,select:hover,textarea:hover{background:#15101d!important;border-color:rgba(226,205,239,.28)!important}input:focus,select:focus,textarea:focus{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(180,142,215,.13),0 0 0 1px rgba(214,180,106,.10)!important}
+    .checkoutPanel{background:linear-gradient(180deg,#21162d,#120d19)!important;color:#fff;border-color:rgba(214,180,106,.17)!important;box-shadow:0 16px 42px rgba(0,0,0,.36)!important}.checkoutHead,.totalStack,.paymentBlock,.followBlock,.settingsDrop{border-color:rgba(226,205,239,.12)!important}.checkoutPanel h3,.netRow strong{color:#fff!important}.totalStack span{color:#bfaed0}.totalStack strong,.moneySummary{color:#ead08c!important}.checkoutPanel .paymentRow,.checkoutPanel .calcNote,.checkoutPanel .toggleLine{background:rgba(255,255,255,.045)!important;border-color:rgba(226,205,239,.13)!important;color:#eadff2!important}
+    .procedureCard,.paymentRow{background:linear-gradient(180deg,rgba(32,22,42,.98),rgba(20,14,28,.98))!important;border-color:rgba(226,205,239,.14)!important;box-shadow:var(--shadowSoft)!important}.procedureCard::before{background:linear-gradient(180deg,var(--primary),var(--gold))!important}.areaList{border-color:rgba(214,180,106,.18)!important}.unitChip{background:rgba(180,142,215,.12)!important;border-color:rgba(226,205,239,.18)!important;color:#f2dcff!important}.totals,.toggleLine,.calcNote,.settingsDrop{background:rgba(255,255,255,.04)!important;border-color:rgba(226,205,239,.13)!important;color:#eadff2!important}.totalLabel{color:#baa9c9}.totalValue{color:#fff}.totalValue.accent{color:#ead08c}
+    .sectionTitle{border-color:var(--line)}.sectionTitle h3{color:#ead08c}.sectionTitle h3::before{background:linear-gradient(180deg,var(--gold),var(--primary))}.blockHead h3{letter-spacing:-.02em;color:#fff}summary{color:#ead08c;font-weight:900}.catalogSavedEmpty{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--muted)}
+    .btn,.miniBtn,.titleBtn,.catalogClose,.modalClose{transition:transform .1s ease,border-color .1s ease,box-shadow .1s ease,background .1s ease}.btn:hover,.miniBtn:hover,.titleBtn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.24)}.btn:active,.miniBtn:active,.titleBtn:active{transform:translateY(0)}.btn.primary{background:linear-gradient(135deg,#7b45a8,#b48ed7)!important;border-color:rgba(226,205,239,.12)!important;color:#fff!important;box-shadow:0 10px 22px rgba(123,69,168,.24)!important}.btn.secondary,.btn.ghost,.miniBtn,.titleBtn{background:rgba(255,255,255,.055)!important;color:#f1e4ff!important;border-color:rgba(226,205,239,.17)!important}.primaryMini{background:linear-gradient(135deg,rgba(180,142,215,.20),rgba(214,180,106,.13))!important;color:#fff!important;border-color:rgba(214,180,106,.24)!important}.btn.danger,.miniBtn.remove,.removeProc,.catalogDeleteBtn{background:rgba(255,118,104,.12)!important;border-color:rgba(255,118,104,.30)!important;color:#ffb7af!important}
+    .previewWrap{background:linear-gradient(180deg,rgba(32,22,42,.96),rgba(16,11,24,.96))}.phone{background:linear-gradient(180deg,#1c1c22,#050506);box-shadow:0 18px 44px rgba(0,0,0,.40),0 0 0 1px rgba(226,205,239,.10)}.screen{background:#eef5fb!important;overflow-y:auto!important;overflow-x:hidden!important;color:#17151a}.chatHead{color:#51606d}.flexCard{box-shadow:0 2px 8px rgba(0,0,0,.06);color:#17151a}.cardHeader{background:linear-gradient(135deg,#9c6bd0,#c5a2e2)!important}.paymentBox{background:#f7f5fa!important;border-color:#ebe4f1!important}.paymentBox *,.flexCard label{color:inherit}
+    .codebox,.jsonBox{background:#09060d!important;color:#efe7f5;border:1px solid rgba(226,205,239,.13)}.status.ok{color:var(--ok)!important}.status.err{color:var(--danger)!important}.catalogBackdrop.open{background:rgba(8,5,12,.72)}.catalogModal,.modalBox{background:#17101f!important;color:#fff!important;border-color:rgba(226,205,239,.16)!important}.catalogModalHead,.modalHead,.modalFooter{background:#17101f!important;border-color:rgba(226,205,239,.12)!important}.catalogHelp{color:var(--muted)!important}
+    @media(max-width:1180px){.shell{grid-template-columns:1fr}.checkoutPanel{background:linear-gradient(180deg,#21162d,#120d19)!important;color:#fff}.checkoutHead h2,.checkoutPanel h3{color:#fff!important}.netRow strong,.moneySummary{color:#ead08c!important}}
+    @media(max-width:760px){.shell{padding:12px;gap:12px}body::before{display:none}header{border-radius:22px}.dashIntro small,.metric small{font-size:12.75px}.metric strong{white-space:normal!important}}
+    @media (prefers-reduced-motion: reduce){.btn,.miniBtn,.titleBtn,.catalogClose,.modalClose{transition:none!important}.btn:hover,.miniBtn:hover,.titleBtn:hover{transform:none!important}}
+
+
+    /* Doctor recommendation editor + second Flex bubble */
+    .recommendSection{margin:0 14px 14px;border:1px solid rgba(83,153,143,.28);border-radius:18px;overflow:hidden;background:rgba(222,246,239,.06)}.recommendHead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 14px;background:linear-gradient(135deg,rgba(55,126,116,.18),rgba(214,180,106,.10));border-bottom:1px solid rgba(83,153,143,.22)}.recommendHead h3{margin:0;color:#bce9df;font-size:15px}.recommendHead p{margin:3px 0 0;color:var(--muted);font-size:12px}.recommendList{padding:12px;display:grid;gap:12px}.recommendCard{background:linear-gradient(180deg,rgba(31,55,52,.72),rgba(19,34,32,.82));border:1px solid rgba(188,233,223,.16);border-radius:16px;padding:12px}.recommendMainRow{display:grid;grid-template-columns:minmax(150px,1.35fr) .55fr .55fr .72fr 48px;gap:9px;align-items:end}.recommendNoteRow{margin-top:10px}.recommendAreaList{display:grid;gap:8px;margin:11px 0 0 14px;padding-left:12px;border-left:1px dashed rgba(188,233,223,.24)}.recommendAreaRow{display:grid;grid-template-columns:minmax(150px,1.4fr) .55fr .55fr 42px;gap:8px;align-items:end}.recommendAreaAdd{margin:9px 0 0 27px}
+    .previewPager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 10px}.previewPager button{border:1px solid #cbd8e2;border-radius:999px;background:#fff;color:#5d6872;padding:8px 6px;font-size:11.5px;font-weight:950;cursor:pointer}.previewPager button.active{background:#7e4aaa;border-color:#7e4aaa;color:#fff}.previewPager button[data-preview-page="1"].active{background:#397f75;border-color:#397f75}.previewViewport{width:100%;overflow:hidden}.previewPage{display:none;width:100%}.previewPage.active{display:block}.previewPage .flexCard{width:100%;max-width:307px;margin:0 auto}.recommendFlexCard{background:#effaf6!important;border-color:#cde9df!important}.recommendFlexCard .cardHeader{background:linear-gradient(135deg,#397f75,#72b7a8)!important}.recommendFlexBody{padding:18px;background:linear-gradient(180deg,#effaf6,#fff)}.recommendIntro{font-size:13px;color:#52716a;line-height:1.5;margin-bottom:13px}.recommendFlexItem{background:#fff;border:1px solid #d8ece6;border-radius:12px;padding:12px;margin-bottom:9px}.recommendFlexTitleRow,.recommendFlexDetailRow{display:grid;grid-template-columns:5fr 2fr 4fr;gap:7px;align-items:start}.recommendFlexTitle{font-size:15.5px;font-weight:950;color:#245f57}.recommendFlexQty{font-size:14px;font-weight:950;color:#245f57;text-align:right;white-space:nowrap}.recommendFlexPrice{font-size:15px;font-weight:950;color:#397f75;text-align:right;white-space:nowrap}.recommendFlexDetail,.recommendFlexDetailQty{font-size:13px;color:#5f716d;line-height:1.4}.recommendFlexDetailQty{text-align:right;white-space:nowrap}.recommendFlexNote{font-size:13px;color:#5f716d;line-height:1.45;margin-top:7px;padding-top:7px;border-top:1px dashed #d8ece6;white-space:pre-line}.recommendFooter{font-size:11.5px;color:#678079;text-align:center;line-height:1.45;margin-top:12px;font-weight:800}
+    @media(max-width:760px){.recommendMainRow,.recommendAreaRow{grid-template-columns:1fr}.recommendMainRow .miniBtn,.recommendAreaRow .miniBtn{grid-column:1/-1}.recommendAreaList,.recommendAreaAdd{margin-left:0;padding-left:0;border-left:0}}
+  </style>
+</head>
+<body><main class="shell"><header><div><h1>Jinsoo Procedure Flex Preview</h1><p class="subtitle">Dashboard สำหรับเคสหัตถการ: ตรวจคนไข้ → ตรวจยอด/รายการ → Preview LINE → ส่งเข้า n8n / Google Sheet</p></div><div class="pill">Patients / หัตถการที่รับ</div></header>
+<section class="dashboard" aria-label="ภาพรวมเคส">
+  <div class="dashIntro"><span class="eyebrow">CASE DASHBOARD</span><strong>ตรวจความพร้อมก่อนส่ง LINE</strong><small>ข้อมูลนี้คำนวณจากฟอร์มด้านล่างแบบสด ไม่เปลี่ยน payload เดิม</small></div>
+  <div class="metric patientMetric"><span class="metricLabel">Patient</span><strong id="dashPatient">ยังไม่ระบุ HN</strong><small id="dashUid">UID ยังไม่พร้อม</small></div>
+  <div class="metric moneyMetric"><span class="metricLabel">Net total</span><strong id="dashNet">0 บาท</strong><small id="dashBalance">คงเหลือ 0 บาท</small></div>
+  <div class="metric"><span class="metricLabel">Procedures</span><strong id="dashProcedureCount">0 รายการ</strong><small id="dashProcedureUnits">ยังไม่มีรายละเอียด</small></div>
+  <div class="metric"><span class="metricLabel">Follow-up</span><strong id="dashFollowDate">ยังไม่ระบุ</strong><small id="dashFollowTime">เวลา -</small></div>
+  <div class="metric"><span class="metricLabel">Payment</span><strong id="dashPaid">0 บาท</strong><small id="dashPaymentMethod">-</small></div>
+</section>
+<section class="salesPanel">
+  <form class="salesForm" id="f">
+    <div class="patientBar">
+      <div class="barTitle"><span class="panelKicker">01 / Patient</span><strong>เริ่มจาก HN แล้วทำรายการเหมือน POS</strong></div>
+      <div><label>วันที่</label><input id="date" type="date"></div>
+      <div><label>HN</label><input id="hn" placeholder="2204927"></div>
+      <div><label>LINE UID</label><input id="uid" placeholder="Uxxxxxxxxxxxxxxxx"></div>
+      <div><label>ชื่อเล่น</label><input id="nickname" value="จอย"></div>
+      <div><label>ชื่อจริง</label><input id="realName" placeholder="ดึงจาก 22.8" readonly></div>
+    </div>
+
+    <div class="salesMain">
+      <section class="cartPanel">
+        <div class="cartHead">
+          <div><span class="panelKicker">02 / Treatment cart</span><h2>ตะกร้าหัตถการ</h2><p>รายการหลักอยู่กลางจอ แก้จำนวน/บริเวณ/ราคาได้ทันที ไม่ต้องเปิดหลายหน้าต่าง</p></div>
+          <div class="cartActions"><button type="button" class="btn primary" id="addProcTop">+ เพิ่มหัตถการ</button><button type="button" class="btn secondary" id="addProcedureCatalogBtn">+ ชื่อหัตถการ</button><button type="button" class="btn secondary" id="editProcedureCatalogBtn">แก้ dropdown</button></div>
+        </div>
+        <div class="miniCatalogActions"><button type="button" class="titleBtn" id="addUnitCatalogBtn">+ หน่วย</button><button type="button" class="titleBtn" id="editUnitCatalogBtn">แก้หน่วย</button><button type="button" class="titleBtn" id="addStatusCatalogBtn">+ สถานะ</button></div>
+        <div class="rawInputBox" style="margin:14px;border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(180,142,215,.07)">
+          <label for="rawProcedureInput">วางรายการแบบข้อความ</label>
+          <textarea id="rawProcedureInput" rows="3" placeholder="Botox กราม 50u ลิฟกรอบหน้า 50u ริ้วรอย 50u / Intensive(หน้าแก้ม,ร่องแก้ม) 6cc / ส่วนลด 845(5%) 45(P) = 890"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:8px"><button type="button" class="btn secondary" id="parseProcedureBtn">แปลงเป็นรายการ</button></div>
+        </div>
+        <div id="procedures" class="cartList"></div>
+        <section class="recommendSection" aria-label="หัตถการที่คุณหมอแนะนำ">
+          <div class="recommendHead"><div><h3>หัตถการที่คุณหมอแนะนำ</h3><p>จะแสดงเป็น Flex หน้าที่ 2 ด้วยพื้นหลังสีเขียวมิ้นต์</p></div><button type="button" class="miniBtn primaryMini" id="addRecommendation">+ เพิ่มคำแนะนำ</button></div>
+          <div id="recommendations" class="recommendList"></div>
+        </section>
+        <datalist id="procedureOptions"><option value="Botox"></option><option value="Filler"></option><option value="Filler E"></option><option value="Filler Restylane"></option><option value="Filler Juvederm"></option><option value="Filler Neuramis"></option><option value="Juvelook"></option><option value="Juvelook Volume"></option><option value="Rejuran"></option><option value="Rejuran Healer"></option><option value="Sculptra"></option><option value="Radiesse"></option><option value="Meso Fat"></option><option value="Meso หน้าใส"></option><option value="Skin Booster"></option><option value="Exosome"></option><option value="PRP"></option><option value="HIFU"></option><option value="Ulthera"></option><option value="Thermage"></option><option value="Ultraformer"></option><option value="Morpheus8"></option><option value="Pico Laser"></option><option value="Q-Switch Laser"></option><option value="IPL"></option><option value="CO2 Laser"></option><option value="Acne Injection"></option><option value="กดสิว"></option><option value="ทรีทเมนท์"></option><option value="IV Drip"></option></datalist>
+        <datalist id="areaOptions"><option value="หน้าผาก"></option><option value="หว่างคิ้ว"></option><option value="หางตา"></option><option value="ใต้ตา"></option><option value="ร่องแก้ม"></option><option value="แก้ม"></option><option value="แก้มตอบ"></option><option value="ขมับ"></option><option value=".P.T.Q. ขมับ"></option><option value="คาง"></option><option value="กรอบหน้า"></option><option value="กราม"></option><option value="ลิฟกรอบหน้า"></option><option value="ลำคอ"></option><option value="ปีกจมูก"></option><option value="สันจมูก"></option><option value="ปลายจมูก"></option><option value="ปาก"></option><option value="มุมปาก"></option><option value="หน้าแก้ม"></option><option value="ทั่วหน้า"></option><option value="รูขุมขน"></option><option value="หลุมสิว"></option><option value="ฝ้า"></option><option value="กระ"></option><option value="รอยดำ"></option><option value="รอยแดง"></option><option value="ริ้วรอย"></option><option value="รักแร้"></option><option value="น่อง"></option><option value="แขน"></option><option value="หน้าท้อง"></option></datalist>
+      </section>
+
+      <aside class="checkoutPanel">
+        <div class="checkoutHead"><span class="panelKicker">03 / Checkout</span><h2>สรุปก่อนส่ง</h2></div>
+        <div class="totalStack">
+          <div><span>รวมราคา</span><strong id="subtotalTotal">0 บาท</strong></div>
+          <div><span>ส่วนลดรวม</span><input id="discount" inputmode="decimal" placeholder="0"></div>
+          <div id="discountBreakdown" style="display:none;grid-template-columns:1fr auto;gap:4px;color:#cdbbdd;font-size:12px"></div>
+          <div class="netRow"><span>ยอดสุทธิ</span><strong id="netTotal">0 บาท</strong></div>
+          <div style="display:none">ส่วนลด: <span id="discountTotal">-</span></div>
+        </div>
+        <div class="paymentBlock"><div class="blockHead"><h3>ชำระเงิน</h3><button type="button" class="miniBtn primaryMini" id="addPayment">+ เพิ่มช่องทางการชำระเงิน</button></div><div id="payments"></div><div class="calcNote">ยอดชำระรวม: <span id="paidTotal" class="moneySummary">0 บาท</span><br>คงเหลือ/เกิน: <span id="balanceTotal" class="moneySummary">0 บาท</span><br>ช่องทาง: <span id="paymentSummary">-</span></div></div>
+        <div class="followBlock"><h3>นัดติดตามผล</h3><div class="twoCols"><div><label>วันนัด</label><input id="followDate" type="date"></div><div><label>เวลา</label><input id="followTime" type="time" value="11:30"></div></div><label>หมายเหตุ</label><textarea id="followNote">สามารถเลื่อนนัดได้ไม่เกิน 2 สัปดาห์</textarea><button type="button" class="miniBtn" id="addFollowNoteLine">+ เพิ่มบรรทัด</button></div>
+        <details class="settingsDrop"><summary>Webhook / JSON</summary><div class="toggleLine"><input id="approve" type="checkbox" checked><label for="approve" style="margin:0">เลือกส่ง LINE / บันทึกค่า ✓</label></div><label>n8n Webhook URL</label><input id="webhook" placeholder="https://n8n.zugust.cloud/webhook/jinsoo-procedure-intake"><div class="actions smallActions"><button type="button" class="btn secondary" id="copyBtn">Copy JSON</button><button type="button" class="btn ghost" id="toggleJsonBtn">ดู/ซ่อน JSON</button></div><pre id="jsonBox" class="codebox"></pre></details>
+        <div class="sendBar"><button type="button" class="btn primary" id="previewBtn">Preview</button><button type="button" class="btn danger" id="sendBtn">ส่งเข้า n8n Webhook</button><div id="status" class="status">พร้อมใช้งาน</div></div>
+      </aside>
+    </div>
+  </form>
+</section>
+<section class="panel previewPanel"><h2><span><span class="panelKicker">02 / Customer message</span>LINE Flex Preview</span></h2><div class="previewWrap"><div class="phone"><div class="screen"><div class="chatHead">Jinsoo Clinic</div><div id="preview"></div></div></div></div></section></main>
+<div id="catalogBackdrop" class="catalogBackdrop" aria-hidden="true">
+  <div class="catalogModal" role="dialog" aria-modal="true" aria-labelledby="catalogModalTitle">
+    <div class="catalogModalHead">
+      <h3 id="catalogModalTitle">เพิ่มข้อมูล</h3>
+      <button type="button" class="catalogClose" id="catalogModalClose" aria-label="ปิด">×</button>
+    </div>
+    <p class="catalogHelp" id="catalogModalHelp">เพิ่มรายการใหม่ลงใน dropdown ของฟอร์ม แล้วระบบจะจำไว้ในเครื่องนี้</p>
+    <div id="catalogModalInputWrap">
+      <label id="catalogModalLabel" for="catalogModalInput">ชื่อรายการ</label>
+      <input id="catalogModalInput" type="text" autocomplete="off" placeholder="พิมพ์ชื่อรายการ">
+    </div>
+    <div id="catalogSavedList" class="catalogSavedList" aria-live="polite"></div>
+    <div class="catalogModalActions">
+      <button type="button" class="btn secondary" id="catalogModalCancel">ยกเลิก</button>
+      <button type="button" class="btn primary" id="catalogModalSave">บันทึก</button>
+    </div>
+  </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const state = { procedures: [], recommendations: [], payments: [], discount: '', discountBirthday: '', discountPoints: '', discountText: '', realName: '', autoFillFirstPayment: true };
+const WEBHOOK_URL = 'https://n8n.zugust.cloud/webhook/jinsoo-procedure-intake';
+const LOOKUP_URL = 'https://n8n.zugust.cloud/webhook/jinsoo-patient-lookup';
+let renderTimer = null;
+let lookupTimer = null;
+let lastLookupHN = '';
+let lookupController = null;
+let lookupSeq = 0;
+let lookupInFlightHN = '';
+let manualUidTouched = false;
+let manualNicknameTouched = false;
+let previewPageIndex = 0;
+
+function clean(v){ return String(v ?? '').trim(); }
+function n(v){ const x = Number(clean(v).replace(/,/g,'')); return Number.isFinite(x) ? x : 0; }
+function money(v){ const x = typeof v === 'number' ? v : n(v); return x ? x.toLocaleString('th-TH') + ' บาท' : '-'; }
+function moneyTotal(v){ const x = typeof v === 'number' ? v : n(v); return x.toLocaleString('th-TH') + ' บาท'; }
+function plainAmount(v){ const x = typeof v === 'number' ? v : n(v); return x ? String(x) : ''; }
+function dateTH(v){ if(!v) return ''; const [y,m,d] = v.split('-').map(Number); const date = new Date(y,m-1,d); const weekdays = ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.']; const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']; if(date.getFullYear()!==y || date.getMonth()!==m-1 || date.getDate()!==d) return `${Number(d)}/${Number(m)}/${Number(y)+543}`; return `${weekdays[date.getDay()]} ${Number(d)} ${months[Number(m)-1]} ${Number(y)+543}`; }
+function compactDateTH(v){ if(!v) return ''; const [y,m,d] = v.split('-').map(Number); const date = new Date(y,m-1,d); const weekdays = ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.']; const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']; if(date.getFullYear()!==y || date.getMonth()!==m-1 || date.getDate()!==d) return `${Number(d)}/${Number(m)}/${Number(y)+543}`; return `${weekdays[date.getDay()]} ${Number(d)} ${months[Number(m)-1]} ${Number(y)+543}`; }
+function timeTH(v){ return v ? v.replace(/^0/,'') + ' น.' : ''; }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function esc(s){ return String(s ?? '').replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function normHN(v){ let s = clean(v).replace(/^'+/,''); if(/^\d+\.0+$/.test(s)) s = String(Number(s)); return s; }
+function scheduleRender(){ clearTimeout(renderTimer); renderTimer = setTimeout(render, 120); }
+function setStatus(t, ok){ const el = $('status'); el.className = 'status ' + (ok ? 'ok' : 'err'); el.textContent = t; }
+
+function procedureSubtotal(){ return state.procedures.reduce((sum, p) => sum + n(p.price), 0); }
+function discountAmount(){ return n(state.discount); }
+function discountLines(){
+  return [
+    state.discountBirthday ? `ส่วนลดเดือนเกิด (5%) ${moneyTotal(n(state.discountBirthday))}` : '',
+    state.discountPoints ? `ส่วนลด Point ${moneyTotal(n(state.discountPoints))}` : ''
+  ].filter(Boolean);
+}
+function netAmount(){ return Math.max(procedureSubtotal() - discountAmount(), 0); }
+function parseRawProcedureText(raw){
+  const text = clean(raw);
+  if(!text) return null;
+  const parts = text.split('/').map(clean).filter(Boolean);
+  const procedureParts = parts.filter(part => !/ส่วนลด|ยอดรวม|^=/.test(part));
+  const discountPart = parts.find(part => /ส่วนลด|ยอดรวม|\(\s*5\s*%\s*\)|\(\s*P\s*\)|=/.test(part)) || '';
+  const procedures = [];
+  for(const part of procedureParts){
+    const qtyMatches = [...part.matchAll(/(\d+(?:\.\d+)?)\s*(u|cc|ml|shot|ครั้ง|ขวด)\b/gi)];
+    if(!qtyMatches.length){
+      const name = clean(part);
+      if(name) procedures.push({ id:uid(), name, totalQty:'', unit:'', price:'', storedQty:'', bonusStatus:'', areas:[] });
+      continue;
+    }
+    const firstQty = qtyMatches[0];
+    const unit = firstQty[2].toLowerCase();
+    const name = clean(part.slice(0, firstQty.index).replace(/\s+$/,''));
+    const details = [];
+    if(name.toLowerCase().startsWith('botox')){
+      const detailText = name.replace(/^Botox\s*/i,'');
+      const re = /([^\d]+?)\s*(\d+(?:\.\d+)?)\s*u\b/gi; let m;
+      while((m = re.exec(part.replace(/^Botox\s*/i,'')))) details.push({ id:uid(), area:clean(m[1]), qty:m[2], bonusStatus:'' });
+    }
+    const numericTotal = qtyMatches.reduce((sum, match) => sum + n(match[1]), 0);
+    const parenthesized = name.match(/^([^()]+)\(([^)]+)\)$/);
+    let displayName = /^Botox\b/i.test(name) ? 'Botox' : name;
+    let genericAreas = [];
+    if(parenthesized){
+      displayName = clean(parenthesized[1]);
+      genericAreas = parenthesized[2].split(',').map(clean).filter(Boolean).map(area => ({ id:uid(), area, qty:firstQty[1], bonusStatus:'' }));
+    }
+    if(!displayName) displayName = clean(part.replace(/\s*\d+(?:\.\d+)?\s*(?:u|cc|ml|shot|ครั้ง|ขวด)\b.*$/i,''));
+    procedures.push({ id:uid(), name:displayName, totalQty:unit === 'u' && details.length ? String(details.reduce((s,x)=>s+n(x.qty),0)) : firstQty[1], unit, price:'', storedQty:'', bonusStatus:'', areas:details.length ? details : genericAreas });
+  }
+  const birthday = discountPart.match(/(?:ส่วนลด\s*)?(\d+(?:\.\d+)?)\s*\(\s*5\s*%\s*\)/i);
+  const points = discountPart.match(/(\d+(?:\.\d+)?)\s*\(\s*P\s*\)/i);
+  const total = discountPart.match(/=\s*(\d+(?:\.\d+)?)/);
+  return { procedures, birthday: birthday ? birthday[1] : '', points: points ? points[1] : '', total: total ? total[1] : '' };
+}
+function applyRawProcedureText(){
+  const parsed = parseRawProcedureText($('rawProcedureInput').value);
+  if(!parsed){ setStatus('กรุณาวางรายการก่อนแปลง', false); return; }
+  if(!parsed.procedures.length){ setStatus('ยังแยกรายการหัตถการไม่ได้ — กรุณาตรวจรูปแบบข้อความ', false); return; }
+  state.procedures = parsed.procedures;
+  state.recommendations = [];
+  state.discountBirthday = parsed.birthday;
+  state.discountPoints = parsed.points;
+  state.discountText = discountLines().join(' + ');
+  state.discount = parsed.total || String(n(parsed.birthday) + n(parsed.points));
+  $('discount').value = state.discount;
+  state.autoFillFirstPayment = true;
+  renderForm();
+  setStatus('แปลงรายการและส่วนลดแล้ว กรุณาตรวจ Preview ก่อนส่ง', true);
+}
+function syncAutoPayment(){
+  if(!(state.autoFillFirstPayment && state.payments.length === 1)) return;
+  const p = state.payments[0];
+  p.amount = plainAmount(netAmount());
+  const el = document.querySelector(`[data-pay="${p.id}"][data-pk="amount"]`);
+  if(el && document.activeElement !== el) el.value = p.amount;
+}
+
+const BASE_UNIT_OPTIONS = ['u','cc','ครั้ง','shot','ขวด'];
+const BASE_STATUS_OPTIONS = ['แถม/หมด','แถม/เก็บ'];
+let catalogModalMode = '';
+let catalogModalEditMode = false;
+
+function normText(v){ return clean(v).replace(/\s+/g,' ').toLowerCase(); }
+function loadJsonList(key){
+  try{ const v = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(v) ? v.map(clean).filter(Boolean) : []; }
+  catch(e){ return []; }
+}
+function saveJsonList(key, items){
+  const dedup = [];
+  const seen = new Set();
+  for (const item of items) {
+    const s = clean(item);
+    const k = normText(s);
+    if (!s || seen.has(k)) continue;
+    seen.add(k);
+    dedup.push(s);
+  }
+  localStorage.setItem(key, JSON.stringify(dedup));
+}
+function mergeUnique(first, second){
+  const out = [];
+  const seen = new Set();
+  for (const item of [...first, ...second]) {
+    const s = clean(item);
+    const k = normText(s);
+    if (!s || seen.has(k)) continue;
+    seen.add(k);
+    out.push(s);
+  }
+  return out;
+}
+function refreshCatalogDropdowns(){
+  const procEl = $('procedureOptions');
+  const areaEl = $('areaOptions');
+  if(procEl){
+    const existing = Array.from(procEl.querySelectorAll('option')).map(o => o.value);
+    const custom = loadJsonList('jinsooCustomProcedureOptions');
+    procEl.innerHTML = mergeUnique(custom, existing).map(v => `<option value="${esc(v)}"></option>`).join('');
+  }
+  if(areaEl){
+    const existing = Array.from(areaEl.querySelectorAll('option')).map(o => o.value);
+    const custom = loadJsonList('jinsooCustomAreaOptions');
+    areaEl.innerHTML = mergeUnique(custom, existing).map(v => `<option value="${esc(v)}"></option>`).join('');
+  }
+}
+function unitSelectHtml(selected, pid){
+  const custom = loadJsonList('jinsooCustomUnitOptions');
+  const values = mergeUnique(selected ? [selected] : [], mergeUnique(custom, BASE_UNIT_OPTIONS));
+  return `<select data-p="${esc(pid)}" data-k="unit">${values.map(v => `<option ${v === selected ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>`;
+}
+function catalogKeyForMode(mode){ return mode === 'procedure' ? 'jinsooCustomProcedureOptions' : (mode === 'status' ? 'jinsooCustomStatusOptions' : 'jinsooCustomUnitOptions'); }
+function catalogThaiName(mode){ return mode === 'procedure' ? 'หัตถการ' : (mode === 'status' ? 'สถานะ' : 'หน่วย'); }
+function renderCatalogSavedList(){
+  const box = $('catalogSavedList');
+  if(!box) return;
+  if(!catalogModalEditMode){ box.classList.remove('open'); box.innerHTML = ''; return; }
+  const items = loadJsonList(catalogKeyForMode(catalogModalMode));
+  box.classList.add('open');
+  if(!items.length){
+    box.innerHTML = `<div class="catalogSavedEmpty">ยังไม่มี${catalogThaiName(catalogModalMode)}ที่บันทึกเองในเครื่องนี้</div>`;
+    return;
+  }
+  box.innerHTML = items.map((item, i) => `<div class="catalogSavedRow">
+    <input data-catalog-index="${i}" value="${esc(item)}" autocomplete="off" aria-label="แก้ไข${catalogThaiName(catalogModalMode)} ${i+1}">
+    <button type="button" class="catalogDeleteBtn" data-catalog-delete="${i}" aria-label="ลบ${catalogThaiName(catalogModalMode)} ${esc(item)}">ลบ</button>
+  </div>`).join('');
+}
+function openCatalogModal(mode, editMode = false){
+  catalogModalMode = mode;
+  catalogModalEditMode = !!editMode;
+  const thai = catalogThaiName(mode);
+  const title = catalogModalEditMode ? `แก้ไข${thai}ที่บันทึก` : `เพิ่ม${thai}ใหม่`;
+  const help = catalogModalEditMode
+    ? `แก้ไขหรือลบ${thai}ที่เคยเพิ่มเองไว้ใน dropdown ของเครื่องนี้ แล้วกดบันทึก`
+    : (mode === 'procedure'
+      ? 'เพิ่มชื่อหัตถการใหม่ลงใน dropdown ของฟอร์ม (เช่น Juvelook, Exosome, HIFU)'
+      : (mode === 'status' ? 'เพิ่มสถานะใหม่ลงใน dropdown ของฟอร์ม' : 'เพิ่มหน่วยใหม่ลงใน dropdown ของฟอร์ม (เช่น ml, set, ไซริงค์)'));
+  $('catalogModalTitle').textContent = title;
+  $('catalogModalHelp').textContent = help;
+  $('catalogModalLabel').textContent = mode === 'procedure' ? 'ชื่อหัตถการ' : (mode === 'status' ? 'ชื่อสถานะ' : 'ชื่อหน่วย');
+  $('catalogModalInput').placeholder = mode === 'procedure' ? 'พิมพ์ชื่อหัตถการใหม่' : (mode === 'status' ? 'พิมพ์สถานะใหม่' : 'พิมพ์ชื่อหน่วยใหม่');
+  $('catalogModalInput').value = '';
+  $('catalogModalInputWrap').style.display = catalogModalEditMode ? 'none' : 'block';
+  $('catalogModalSave').textContent = catalogModalEditMode ? 'บันทึกการแก้ไข' : 'บันทึก';
+  renderCatalogSavedList();
+  $('catalogBackdrop').classList.add('open');
+  if(catalogModalEditMode){
+    setTimeout(() => { const first = $('catalogSavedList').querySelector('input'); if(first) first.focus(); }, 0);
+  } else {
+    setTimeout(() => $('catalogModalInput').focus(), 0);
+  }
+}
+function closeCatalogModal(){
+  catalogModalMode = '';
+  catalogModalEditMode = false;
+  $('catalogModalSave').textContent = 'บันทึก';
+  $('catalogModalInputWrap').style.display = 'block';
+  $('catalogSavedList').classList.remove('open');
+  $('catalogSavedList').innerHTML = '';
+  $('catalogBackdrop').classList.remove('open');
+}
+function saveCatalogModal(){
+  const mode = catalogModalMode;
+  const thai = catalogThaiName(mode);
+  const key = catalogKeyForMode(mode);
+  if(catalogModalEditMode){
+    const items = Array.from($('catalogSavedList').querySelectorAll('input[data-catalog-index]')).map(el => el.value);
+    saveJsonList(key, items);
+    refreshCatalogDropdowns();
+    renderForm();
+    closeCatalogModal();
+    setStatus('บันทึกการแก้ไข' + thai + 'แล้ว', true);
+    return;
+  }
+  const raw = clean($('catalogModalInput').value);
+  if(!raw){ setStatus('กรอกชื่อก่อนบันทึก', false); $('catalogModalInput').focus(); return; }
+  const items = loadJsonList(key);
+  const exists = mergeUnique(items, []).some(v => normText(v) === normText(raw));
+  if(exists){ setStatus('มีรายการนี้อยู่แล้ว', false); return; }
+  items.unshift(raw);
+  saveJsonList(key, items);
+  refreshCatalogDropdowns();
+  renderForm();
+  closeCatalogModal();
+  setStatus('เพิ่ม' + thai + 'ใหม่แล้ว', true);
+}
+function addProcedure(){
+  state.procedures.push({ id:uid(), name:'', totalQty:'', unit:'u', price:'', storedQty:'', bonusStatus:'', areas:[{id:uid(), area:'', qty:'', bonusStatus:''}], remainingQty:'' });
+  renderForm();
+}
+function blankRecommendation(){ return { id:uid(), name:'', totalQty:'', unit:'cc', price:'', note:'', areas:[{id:uid(), area:'', qty:''}] }; }
+function addRecommendation(){ state.recommendations.push(blankRecommendation()); renderForm(); }
+function removeRecommendation(id){ state.recommendations = state.recommendations.filter(r => r.id !== id); previewPageIndex = 0; renderForm(); }
+function addRecommendationArea(rid){ const r=state.recommendations.find(x=>x.id===rid); if(!r) return; r.areas.push({id:uid(),area:'',qty:''}); renderForm(); }
+function removeRecommendationArea(rid,aid){ const r=state.recommendations.find(x=>x.id===rid); if(r && r.areas.length>1) r.areas=r.areas.filter(a=>a.id!==aid); renderForm(); }
+function addArea(pid){ const p = state.procedures.find(x => x.id === pid); if(!p) return; p.areas.push({id:uid(), area:'', qty:'', bonusStatus:''}); renderForm(); }
+function addPayment(){ state.autoFillFirstPayment = false; state.payments.push({ id:uid(), amount:'', method:'โอน' }); renderForm(); }
+function removeProcedure(pid){ if(state.procedures.length > 1) state.procedures = state.procedures.filter(p => p.id !== pid); renderForm(); }
+function removeArea(pid, aid){ const p = state.procedures.find(x => x.id === pid); if(p && p.areas.length > 1) p.areas = p.areas.filter(a => a.id !== aid); renderForm(); }
+function removePayment(id){ if(state.payments.length > 1) state.payments = state.payments.filter(p => p.id !== id); if(state.payments.length === 1 && !state.payments[0].amountTouched) state.autoFillFirstPayment = true; renderForm(); }
+
+function bonusStatusSelectHtml(selected, attrs){
+  const values = mergeUnique(selected ? [selected] : [], mergeUnique(loadJsonList('jinsooCustomStatusOptions'), BASE_STATUS_OPTIONS));
+  return `<select ${attrs}><option value="" ${!selected?'selected':''}>-</option>${values.map(v => `<option ${v === selected ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>`;
+}
+function procedureMarkup(p){
+  return `<div class="procedureCard">
+    <div class="procHead">
+      <div><label>หัตถการ</label><input list="procedureOptions" data-p="${p.id}" data-k="name" value="${esc(p.name)}" autocomplete="off" placeholder="เลือกหรือพิมพ์หัตถการ"></div>
+      <div><label>จำนวนรวม</label><input data-p="${p.id}" data-k="totalQty" value="${esc(p.totalQty)}" inputmode="decimal"></div>
+      <div><label>หน่วย</label>${unitSelectHtml(p.unit, p.id)}</div>
+      <div><label>ราคา / บาท</label><input data-p="${p.id}" data-k="price" value="${esc(p.price)}" inputmode="decimal"></div>
+      <div><label>เหลือเก็บ</label><input data-p="${p.id}" data-k="storedQty" value="${esc(p.storedQty || '')}" inputmode="decimal"></div>
+      <div><label>สถานะ</label>${bonusStatusSelectHtml(p.bonusStatus || '', `data-p="${p.id}" data-k="bonusStatus"`)}</div>
+      <button type="button" class="miniBtn remove removeProc" data-remove-proc="${p.id}">ลบ</button>
+    </div>
+    <div class="areaList">${p.areas.map(a => `<div class="areaRow">
+      <div><label>บริเวณ</label><input list="areaOptions" data-p="${p.id}" data-a="${a.id}" data-ak="area" value="${esc(a.area)}" autocomplete="off" placeholder="เลือกหรือพิมพ์บริเวณ"></div>
+      <div><label>จำนวน</label><input data-p="${p.id}" data-a="${a.id}" data-ak="qty" value="${esc(a.qty)}" inputmode="decimal"></div>
+      <div><label>หน่วย</label><div class="unitChip">${esc(p.unit)}</div></div>
+      <div><label>สถานะ</label>${bonusStatusSelectHtml(a.bonusStatus || '', `data-p="${p.id}" data-a="${a.id}" data-ak="bonusStatus"`)}</div>
+      <button type="button" class="miniBtn remove" data-remove-area="${p.id}:${a.id}">-</button>
+    </div>`).join('')}</div>
+    <div class="areaAddLine"><button type="button" class="miniBtn" data-add-area="${p.id}">+ เพิ่มบริเวณ</button></div>
+  </div>`;
+}
+function paymentMarkup(p){
+  return `<div class="paymentRow">
+    <div><label>ยอดชำระ</label><input data-pay="${p.id}" data-pk="amount" value="${esc(p.amount)}" inputmode="decimal"></div>
+    <div><label>ช่องทางชำระ</label><select data-pay="${p.id}" data-pk="method"><option ${p.method==='เงินสด'?'selected':''}>เงินสด</option><option ${p.method==='โอน'?'selected':''}>โอน</option><option ${p.method==='บัตรเครดิต'?'selected':''}>บัตรเครดิต</option><option ${p.method==='QR'?'selected':''}>QR</option><option ${p.method==='HD Mall 0% 3เดือน'?'selected':''}>HD Mall 0% 3เดือน</option><option ${p.method==='HD Mall 0% 4 เดือน'?'selected':''}>HD Mall 0% 4 เดือน</option><option ${p.method==='HD Mall 0% 6 เดือน'?'selected':''}>HD Mall 0% 6 เดือน</option><option ${p.method==='HD Mall 0% 10 เดือน'?'selected':''}>HD Mall 0% 10 เดือน</option><option ${p.method==='มัดจำ'?'selected':''}>มัดจำ</option><option ${p.method==='อื่นๆ'?'selected':''}>อื่นๆ</option></select></div>
+    <button type="button" class="miniBtn remove" data-remove-payment="${p.id}">-</button>
+  </div>`;
+}
+function recommendationUnitSelectHtml(r){
+  const values=mergeUnique(r.unit?[r.unit]:[],mergeUnique(loadJsonList('jinsooCustomUnitOptions'),BASE_UNIT_OPTIONS));
+  return `<select data-rec="${r.id}" data-rk="unit">${values.map(v=>`<option ${v===r.unit?'selected':''}>${esc(v)}</option>`).join('')}</select>`;
+}
+function recommendationMarkup(r){
+  const areas=Array.isArray(r.areas)&&r.areas.length?r.areas:[{id:uid(),area:'',qty:''}]; r.areas=areas;
+  return `<div class="recommendCard"><div class="recommendMainRow">
+    <div><label>หัตถการแนะนำ</label><input list="procedureOptions" data-rec="${r.id}" data-rk="name" value="${esc(r.name)}" autocomplete="off" placeholder="เช่น Sculptra, Oligio-X"></div>
+    <div><label>จำนวน</label><input data-rec="${r.id}" data-rk="totalQty" value="${esc(r.totalQty||'')}" inputmode="decimal"></div>
+    <div><label>หน่วย</label>${recommendationUnitSelectHtml(r)}</div>
+    <div><label>ราคา / บาท</label><input data-rec="${r.id}" data-rk="price" value="${esc(r.price||'')}" inputmode="decimal"></div>
+    <button type="button" class="miniBtn remove" data-remove-rec="${r.id}">ลบ</button>
+  </div><div class="recommendAreaList">${areas.map(a=>`<div class="recommendAreaRow">
+    <div><label>บริเวณ</label><input list="areaOptions" data-rec="${r.id}" data-ra="${a.id}" data-rak="area" value="${esc(a.area||'')}" autocomplete="off" placeholder="เลือกหรือพิมพ์บริเวณ"></div>
+    <div><label>จำนวน</label><input data-rec="${r.id}" data-ra="${a.id}" data-rak="qty" value="${esc(a.qty||'')}" inputmode="decimal"></div>
+    <div><label>หน่วย</label><div class="unitChip">${esc(r.unit||'')}</div></div>
+    <button type="button" class="miniBtn remove" data-remove-rec-area="${r.id}:${a.id}">-</button>
+  </div>`).join('')}</div><div class="recommendAreaAdd"><button type="button" class="miniBtn" data-add-rec-area="${r.id}">+ เพิ่มบริเวณ</button></div>
+  <div class="recommendNoteRow"><label>คำอธิบายหัตถการ / เหตุผลที่คุณหมอแนะนำ</label><textarea data-rec="${r.id}" data-rk="note" placeholder="เช่น เพื่อช่วยกระตุ้นคอลลาเจนและยกกระชับ">${esc(r.note||'')}</textarea></div></div>`;
+}
+function renderForm(){
+  $('procedures').innerHTML = state.procedures.map(procedureMarkup).join('');
+  $('recommendations').innerHTML = state.recommendations.length ? state.recommendations.map(recommendationMarkup).join('') : '<div class="catalogSavedEmpty">ยังไม่มีหัตถการแนะนำ — หน้า Flex ที่ 2 จะไม่ถูกส่ง</div>';
+  $('payments').innerHTML = state.payments.map(paymentMarkup).join('');
+  syncAutoPayment();
+  render();
+}
+
+function updateProcedureField(el){
+  const p = state.procedures.find(x => x.id === el.dataset.p); if(!p) return false;
+  if(el.dataset.a){ const a = p.areas.find(x => x.id === el.dataset.a); if(a) a[el.dataset.ak] = el.value; return false; }
+  p[el.dataset.k] = el.value;
+  return el.dataset.k === 'unit';
+}
+function updatePaymentField(el){
+  const p = state.payments.find(x => x.id === el.dataset.pay); if(!p) return;
+  p[el.dataset.pk] = el.value;
+  if(el.dataset.pk === 'amount'){
+    p.amountTouched = true;
+    state.autoFillFirstPayment = false;
+  }
+}
+function handleDynamicInput(e){
+  const el = e.target;
+  if(el.matches('[data-p]')){ updateProcedureField(el); scheduleRender(); }
+  if(el.matches('[data-rec]')){ const r=state.recommendations.find(x=>x.id===el.dataset.rec); if(r){ if(el.dataset.ra){ const a=r.areas.find(x=>x.id===el.dataset.ra); if(a) a[el.dataset.rak]=el.value; } else r[el.dataset.rk]=el.value; } scheduleRender(); }
+  if(el.matches('[data-pay]')){ updatePaymentField(el); scheduleRender(); }
+}
+function handleDynamicChange(e){
+  const el = e.target;
+  if(el.matches('select[data-p][data-k="unit"]')){ updateProcedureField(el); renderForm(); return; }
+  if(el.matches('[data-p]')){ updateProcedureField(el); render(); }
+  if(el.matches('select[data-rec][data-rk="unit"]')){ const r=state.recommendations.find(x=>x.id===el.dataset.rec); if(r) r.unit=el.value; renderForm(); return; }
+  if(el.matches('[data-rec]')){ handleDynamicInput(e); render(); }
+  if(el.matches('[data-pay]')){ updatePaymentField(el); render(); }
+}
+
+function getProcedures(){
+  return state.procedures.map(p => ({
+    name: clean(p.name),
+    totalQty: clean(p.totalQty) + clean(p.unit),
+    unit: clean(p.unit),
+    price: n(p.price),
+    priceText: money(p.price),
+    storedQty: clean(p.storedQty),
+    storedText: clean(p.storedQty) ? clean(p.storedQty) + ' ' + clean(p.unit) : '',
+    bonusStatus: clean(p.bonusStatus),
+    details: p.areas.filter(a => clean(a.area) || clean(a.qty) || clean(a.bonusStatus)).map(a => ({ label: clean(a.area), qty: clean(a.qty) + ' ' + clean(p.unit), bonusStatus: clean(a.bonusStatus) }))
+  })).filter(p => p.name);
+}
+function getRecommendations(){ return state.recommendations.map(r=>({ name:clean(r.name), totalQty:clean(r.totalQty), unit:clean(r.unit), price:n(r.price), priceText:money(r.price), note:clean(r.note), details:(r.areas||[]).filter(a=>clean(a.area)||clean(a.qty)).map(a=>({label:clean(a.area),qty:clean(a.qty)+(clean(a.qty)?' '+clean(r.unit):'')})) })).filter(r=>r.name||r.note||r.details.length); }
+function getPayments(){ return state.payments.map(p => ({ amount:n(p.amount), amountText:money(p.amount), method:clean(p.method) })).filter(p => p.amount || p.method); }
+function paymentSummary(ps){ return ps.map(p => p.method).filter(Boolean).join(' / ') || '-'; }
+function paymentRowsHtml(ps){ return ps.filter(p => p.amount || p.method).map(p => `<div class="paymentMethodRow"><span>- ${esc(p.method || 'ไม่ระบุ')}</span><span class="paymentMethodAmount">${esc(moneyTotal(p.amount))}</span></div>`).join(''); }
+function totalPaid(ps){ return ps.reduce((s,p) => s + (p.amount || 0), 0); }
+function procedureText(procs){
+  return procs.map(p => `${clean(p.name)} ${clean(p.totalQty)}${clean(p.unit)} ${n(p.price) ? 'ราคา '+money(p.price) : ''} ${clean(p.bonusStatus) ? '['+clean(p.bonusStatus)+']' : ''} ${p.areas.map(a => `${clean(a.area)} ${clean(a.qty)}${clean(p.unit)} ${clean(a.bonusStatus) ? '['+clean(a.bonusStatus)+']' : ''}`).join(' ')}${clean(p.storedQty) ? ' เหลือเก็บ '+clean(p.storedQty)+clean(p.unit) : ''}`.replace(/\s+/g,' ').trim()).join(' / ');
+}
+function data(){
+  syncAutoPayment();
+  const procs = getProcedures(), recommendations = getRecommendations(), payments = getPayments(), paid = totalPaid(payments), text = procedureText(state.procedures);
+  const subtotal = procedureSubtotal(), discount = discountAmount(), net = netAmount();
+  const finalAmount = paid || net;
+  return {
+    dateText: compactDateTH($('date').value), วันที่: dateTH($('date').value),
+    hn: $('hn').value, Hn: $('hn').value,
+    uid: $('uid').value, UID: $('uid').value,
+    nickname: $('nickname').value, ชื่อเล่น: $('nickname').value,
+    procedureText: text, หัตถการ: text, procedures: procs,
+    doctorRecommendations: recommendations, 'หัตถการที่คุณหมอแนะนำ': recommendations,
+    subtotal, ยอดก่อนส่วนลด: subtotal, subtotalText: moneyTotal(subtotal),
+    discount, ส่วนลด: discount, discountText: moneyTotal(discount),
+    discountBirthday: n(state.discountBirthday), discountBirthdayText: moneyTotal(n(state.discountBirthday)),
+    discountPoints: n(state.discountPoints), discountPointsText: moneyTotal(n(state.discountPoints)),
+    discountBreakdown: discountLines(),
+    netTotal: net, ยอดสุทธิ: net, netTotalText: moneyTotal(net),
+    payments, amount: finalAmount, ยอด: finalAmount, totalPaidText: moneyTotal(finalAmount), paidTotal: paid, balance: net - paid,
+    paymentMethod: paymentSummary(payments), ช่องทางชำระ: paymentSummary(payments),
+    followDateText: dateTH($('followDate').value), followDateCompact: compactDateTH($('followDate').value), วันนัดติดตามผล: dateTH($('followDate').value),
+    followTimeText: timeTH($('followTime').value), เวลานัดติดตามผล: timeTH($('followTime').value),
+    followNote: $('followNote').value, realName: clean($('realName').value), displayName: [clean($('nickname').value) ? 'คุณ'+clean($('nickname').value) : '', clean($('realName').value)].filter(Boolean).join(' '), เลือกส่ง: $('approve').checked ? '✓' : '',
+    branchName: 'สาขางามวงศ์วาน', phone: '063-446-6931'
+  };
+}
+function render(){
+  syncAutoPayment();
+  const d = data();
+  if($('subtotalTotal')) $('subtotalTotal').textContent = d.subtotalText;
+  if($('discountTotal')) $('discountTotal').textContent = d.discount ? '- ' + d.discountText : '-';
+  if($('discountBreakdown')){ const lines = d.discountBreakdown; $('discountBreakdown').style.display = lines.length ? 'grid' : 'none'; $('discountBreakdown').innerHTML = lines.map(line => `<span>${esc(line)}</span>`).join(''); }
+  if($('netTotal')) $('netTotal').textContent = d.netTotalText;
+  $('paidTotal').textContent = d.totalPaidText;
+  if($('balanceTotal')){ const b = d.balance || 0; $('balanceTotal').textContent = b > 0 ? 'คงเหลือ ' + moneyTotal(b) : (b < 0 ? 'เกิน ' + moneyTotal(Math.abs(b)) : '0 บาท'); }
+  $('paymentSummary').textContent = d.paymentMethod;
+  if($('dashPatient')) $('dashPatient').textContent = clean(d.hn) ? `HN ${clean(d.hn)}${clean(d.nickname) ? ' / คุณ' + clean(d.nickname) : ''}` : 'ยังไม่ระบุ HN';
+  if($('dashUid')) $('dashUid').textContent = clean(d.uid) ? 'UID พร้อมส่ง' : 'UID ยังไม่พร้อม';
+  if($('dashNet')) $('dashNet').textContent = d.netTotalText;
+  if($('dashBalance')){ const b = d.balance || 0; $('dashBalance').textContent = b > 0 ? 'คงเหลือ ' + moneyTotal(b) : (b < 0 ? 'ชำระเกิน ' + moneyTotal(Math.abs(b)) : 'ชำระครบ / ไม่มีคงเหลือ'); }
+  if($('dashProcedureCount')) $('dashProcedureCount').textContent = `${d.procedures.length} รายการ`;
+  if($('dashProcedureUnits')) $('dashProcedureUnits').textContent = d.procedures.map(p => `${p.name} ${p.totalQty}`).filter(Boolean).join(' / ') || 'ยังไม่มีรายละเอียด';
+  if($('dashFollowDate')) $('dashFollowDate').textContent = d.followDateCompact || 'ยังไม่ระบุ';
+  if($('dashFollowTime')) $('dashFollowTime').textContent = d.followTimeText ? 'เวลา ' + d.followTimeText : 'เวลา -';
+  if($('dashPaid')) $('dashPaid').textContent = d.totalPaidText;
+  if($('dashPaymentMethod')) $('dashPaymentMethod').textContent = d.paymentMethod;
+  if($('posPatientSummary')) $('posPatientSummary').textContent = clean(d.hn) ? `HN ${clean(d.hn)}${clean(d.nickname) ? ' / คุณ' + clean(d.nickname) : ''}` : 'HN / UID / ชื่อเล่น';
+  if($('posProcedureSummary')) $('posProcedureSummary').textContent = d.procedures.length ? d.procedures.map(p => `${p.name} ${p.totalQty}`).join(' / ') : 'เพิ่มรายการ + บริเวณ';
+  if($('posPaymentSummary')) $('posPaymentSummary').textContent = `${d.netTotalText} · ${d.paymentMethod}`;
+  if($('posFollowSummary')) $('posFollowSummary').textContent = `${d.followDateCompact || 'วันนัด'} ${d.followTimeText || ''}`.trim();
+  if($('posOrderTitle')) $('posOrderTitle').textContent = clean(d.hn) ? `HN ${clean(d.hn)}${clean(d.nickname) ? ' · คุณ' + clean(d.nickname) : ''}` : 'ยังไม่ระบุ HN';
+  if($('posOrderMeta')) $('posOrderMeta').textContent = clean(d.uid) ? 'UID พร้อมส่ง LINE' : 'UID ยังไม่พร้อม';
+  if($('posNetTotal')) $('posNetTotal').textContent = d.netTotalText;
+  if($('posPaidTotal')) $('posPaidTotal').textContent = d.totalPaidText;
+  if($('posBalanceTotal')){ const b = d.balance || 0; $('posBalanceTotal').textContent = b > 0 ? moneyTotal(b) : (b < 0 ? 'เกิน ' + moneyTotal(Math.abs(b)) : '0 บาท'); }
+  if($('posProcedureCount')) $('posProcedureCount').textContent = `${d.procedures.length} รายการ`;
+  $('jsonBox').textContent = JSON.stringify(d, null, 2);
+  const splitMain = p => {
+    const name = clean(p.name || 'หัตถการ');
+    const qty = clean(p.totalQty || '');
+    const unit = clean(p.unit || '');
+    if(qty) return { name, qty: unit && !qty.includes(unit) ? qty + unit : qty };
+    const m = name.match(/^(.*?)\s+(\d+(?:\.\d+)?)\s*(u|cc|ml|ครั้ง|shot)$/i);
+    return m ? { name: clean(m[1]), qty: `${m[2]}${m[3].toLowerCase()}` } : { name, qty: '' };
+  };
+  const splitDetail = x => {
+    const label = clean(x.label || '');
+    const qty = clean(x.qty || '').replace(/\s+/g, '');
+    if(qty) return { label, qty };
+    const m = label.match(/^(.*?)\s+(\d+(?:\.\d+)?)\s*(u|cc|ml|ครั้ง|shot)$/i);
+    return m ? { label: clean(m[1]), qty: `${m[2]}${m[3].toLowerCase()}` } : { label, qty: '' };
+  };
+  const statusClass = status => status === 'แถม/หมด' ? 'statusDone' : (status === 'แถม/เก็บ' ? 'statusKeep' : '');
+  const statusHtml = status => status ? `<span class="statusChip ${statusClass(status)}">[${esc(status)}]</span>` : '';
+  const treatments = d.procedures.map(p => {
+    const main = splitMain(p);
+    const rawPrice = clean(p.priceText || '');
+    const price = rawPrice && rawPrice !== '-' ? (rawPrice.includes('บาท') ? rawPrice.replace(/\s*บาท$/, '.-') : rawPrice.replace(/\.\-?$/, '.-')) : '';
+    const chips = [p.storedText ? `เหลือเก็บ ${p.storedText}` : ''].filter(Boolean);
+    const chipRow = chips.length ? `<div class="treatmentChips">${chips.map(c => `<span class="treatmentChip">${esc(c)}</span>`).join('')}</div>` : '';
+    const detailRows = (p.details || []).map(x => { const d = splitDetail(x); return `<div class="treatmentDetailRow"><div class="treatmentDetailLabel">- ${esc(d.label)}</div><div class="treatmentDetailQty">${esc(d.qty)}</div><div>${statusHtml(x.bonusStatus || '')}</div></div>`; }).join('');
+    return `<div class="treatmentGroup"><div class="treatmentMainRow"><div class="treatmentTitle">${esc(main.name)}</div><div class="treatmentQty">${esc(main.qty)}</div><div class="treatmentPrice">${statusHtml(p.bonusStatus || '') || esc(price)}</div></div>${detailRows}${chipRow}</div>`;
+  }).join('');
+  const discountLine = `<div class="paymentDiscount">ยอดเต็ม: ${esc(d.subtotalText)}<br>ส่วนลด: ${esc(d.discountText)}${d.discountBreakdown.length ? `<br>${d.discountBreakdown.map(x => esc(x)).join('<br>')}` : ''}</div>`;
+  const recommendationItems=d.doctorRecommendations.map(r=>{ const qty=[r.totalQty,r.unit].filter(Boolean).join(''); const price=r.price?money(r.price).replace(/\s*บาท$/,'.-'):''; const details=(r.details||[]).map(x=>`<div class="recommendFlexDetailRow"><div class="recommendFlexDetail">- ${esc(x.label)}</div><div class="recommendFlexDetailQty">${esc(x.qty)}</div><div></div></div>`).join(''); return `<div class="recommendFlexItem"><div class="recommendFlexTitleRow"><div class="recommendFlexTitle">${esc(r.name||'คำแนะนำจากคุณหมอ')}</div><div class="recommendFlexQty">${esc(qty)}</div><div class="recommendFlexPrice">${esc(price)}</div></div>${details}${r.note?`<div class="recommendFlexNote">${esc(r.note)}</div>`:''}</div>`; }).join('');
+  const hasProcedures=d.procedures.length>0;
+  const hasRecommendations=d.doctorRecommendations.length>0;
+  if(hasProcedures&&!hasRecommendations)previewPageIndex=0;
+  if(!hasProcedures&&hasRecommendations)previewPageIndex=1;
+  const recommendationCard=hasRecommendations?`<article class="flexCard recommendFlexCard"><div class="cardHeader"><div class="cardHeaderTitle">หัตถการที่คุณหมอแนะนำ</div><div class="headerInfoRow"><div class="customerName">คุณ${esc(d.nickname||'-')}</div><div class="serviceDate">${esc(d.dateText||'-')}</div></div></div><div class="recommendFlexBody"><div class="recommendIntro">คำแนะนำเฉพาะบุคคลจากคุณหมอ เพื่อใช้ประกอบการวางแผนดูแลในครั้งถัดไป</div>${recommendationItems}<div class="recommendFooter">สอบถามรายละเอียดหรือจองคิวได้ที่ LINE @jinsooclinic<br>โทร 063-446-6931</div></div></article>`:'';
+  const followUpHtml = d => `<div class="followSection"><div class="followTitle">นัดติดตามผล</div><div class="followRow"><div class="followDate">${esc(d.followDateCompact||d.followDateText||'-')} ช่วงเวลา ${esc(d.followTimeText||'-')}</div></div><div class="followRule">........</div><div class="openingHoursTitle">เวลาทำการ</div><div class="openingHours">11:30 น.</div></div>`;
+  const customerHtml = d.displayName ? `<div class="customerBlock"><div class="customerBlockLabel">ลูกค้า</div><div class="customerBlockName">${esc(d.displayName)}</div></div>` : '';
+  const paymentMethodsHtml = d.payments.length ? `<div class="paymentMethodList">${paymentRowsHtml(d.payments)}</div>` : '';
+  const summaryCard=hasProcedures?`<article class="flexCard"><div class="cardBody">${followUpHtml(d)}${customerHtml}<div class="messageSectionTitle">รายการหัตถการ</div><div class="serviceDateBlock"><span>วันที่</span><strong>${esc(d.dateText||'-')}</strong></div>${treatments}<div class="paymentBox"><div class="paymentMain">ยอดชำระ ${esc(d.netTotalText)}</div>${discountLine}<div class="paymentSub">วิธีชำระ</div>${paymentMethodsHtml}</div></div></article>`:'';
+  const pager=hasProcedures&&hasRecommendations?`<div class="previewPager"><button type="button" data-preview-page="0" class="${previewPageIndex===0?'active':''}">หน้า 1 · รายการ</button><button type="button" data-preview-page="1" class="${previewPageIndex===1?'active':''}">หน้า 2 · คุณหมอแนะนำ</button></div>`:'';
+  const summaryPage=hasProcedures?`<div class="previewPage ${previewPageIndex===0?'active':''}" data-preview-panel="0">${summaryCard}</div>`:'';
+  const recommendationPage=hasRecommendations?`<div class="previewPage ${previewPageIndex===1?'active':''}" data-preview-panel="1">${recommendationCard}</div>`:'';
+  const emptyPreview=!hasProcedures&&!hasRecommendations?'<div class="catalogSavedEmpty">กรอกอย่างน้อย 1 รายการในตะกร้าหัตถการ หรือหัตถการที่คุณหมอแนะนำ</div>':'';
+  $('preview').innerHTML=`${pager}<div class="previewViewport">${summaryPage}${recommendationPage}${emptyPreview}</div>`;
+}
+
+function clearCaseDetailsForHNChange(){
+  state.procedures = [{ id:uid(), name:'', totalQty:'', unit:'u', price:'', storedQty:'', bonusStatus:'', areas:[{id:uid(), area:'', qty:'', bonusStatus:''}], remainingQty:'' }];
+  state.recommendations = [];
+  state.discount = '';
+  state.discountBirthday = '';
+  state.discountPoints = '';
+  state.discountText = '';
+  state.autoFillFirstPayment = true;
+  state.payments = [{ id:uid(), amount:'', method:'โอน' }];
+  if($('discount')) $('discount').value = '';
+  // ล้างยอดรวม/ยอดชำระที่ derive จากรายการเดิมทั้งหมด โดย renderForm จะคำนวณใหม่เป็น 0
+  renderForm();
+}
+
+async function lookupHN(){
+  const hn = normHN($('hn').value);
+  if(!hn || hn.length < 3){
+    lastLookupHN = '';
+    lookupInFlightHN = '';
+    $('uid').value = '';
+    $('nickname').value = '';
+    render();
+    return;
+  }
+  // ถ้ากำลัง lookup HN นี้อยู่แล้ว ห้าม abort เองจาก event blur/change
+  if(lookupInFlightHN === hn) return;
+  // ถ้า HN นี้เติมข้อมูลแล้ว ไม่ต้องยิงซ้ำ
+  if(hn === lastLookupHN && clean($('uid').value) && clean($('nickname').value)) return;
+  if(lookupController) lookupController.abort();
+  const seq = ++lookupSeq;
+  lookupInFlightHN = hn;
+  lookupController = new AbortController();
+  // HN เปลี่ยนแล้ว ต้องล้างค่าเดิมก่อน กันส่งผิดคนจาก UID เก่าค้าง
+  $('uid').value = '';
+  $('nickname').value = '';
+  $('realName').value = '';
+  render();
+  setStatus('กำลังดึงชื่อเล่น/UID จาก HN ' + hn + ' ...', true);
+  try{
+    const res = await fetch(`${LOOKUP_URL}?hn=${encodeURIComponent(hn)}&_=${Date.now()}`, { signal: lookupController.signal, cache:'no-store' });
+    const raw = await res.text();
+    let payload = JSON.parse(raw || '{}');
+    if(typeof payload === 'string') payload = JSON.parse(payload);
+    // ถ้าระหว่างรอ lookup มีการเปลี่ยน HN แล้ว ห้ามเอาผลเก่ามาทับ
+    if(seq !== lookupSeq || normHN($('hn').value) !== hn) return;
+    lastLookupHN = hn;
+    if(payload && payload.found){
+      $('nickname').value = payload.nickname || '';
+      $('uid').value = payload.uid || '';
+      $('realName').value = payload.realName || '';
+      render();
+      if(payload.uid && payload.nickname){
+        setStatus('พบ HN ' + hn + ' และเติมชื่อ/ชื่อเล่น/UID ให้แล้ว', true);
+      } else {
+        setStatus('พบ HN ' + hn + ' แต่ข้อมูลชื่อเล่น/UID ยังไม่ครบใน Sheet', false);
+      }
+    } else {
+      $('uid').value = '';
+      $('nickname').value = '';
+      render();
+      setStatus('ไม่พบ HN ' + hn + ' ใน Google Sheet — UID ถูกล้างแล้ว กรุณากรอกเองถ้าต้องส่ง', false);
+    }
+  } catch(e){
+    if(e.name === 'AbortError') return;
+    if(seq !== lookupSeq) return;
+    setStatus('ดึงข้อมูล HN ไม่สำเร็จ: ' + e.message, false);
+  } finally {
+    if(lookupInFlightHN === hn) lookupInFlightHN = '';
+  }
+}
+function onHNChanged(){
+  const hn = normHN($('hn').value);
+  if(hn !== lastLookupHN){
+    $('uid').value = '';
+    $('nickname').value = '';
+    lastLookupHN = '';
+    clearCaseDetailsForHNChange();
+    if(lookupController && lookupInFlightHN && lookupInFlightHN !== hn) lookupController.abort();
+  } else {
+    scheduleRender();
+  }
+  scheduleLookupHN();
+}
+function scheduleLookupHN(){ clearTimeout(lookupTimer); lookupTimer = setTimeout(lookupHN, 180); }
+
+function resetIntakeForm(){
+  const savedWebhook = clean($('webhook').value) || WEBHOOK_URL;
+  lookupSeq++;
+  if(lookupController) lookupController.abort();
+  lastLookupHN = '';
+  manualUidTouched = false;
+  manualNicknameTouched = false;
+  $('f').reset();
+  const today = new Date(); $('date').valueAsDate = today;
+  const fd = new Date(today); fd.setDate(fd.getDate() + 28); $('followDate').valueAsDate = fd;
+  $('webhook').value = savedWebhook;
+  $('hn').value = '';
+  $('uid').value = '';
+  $('nickname').value = '';
+  $('realName').value = '';
+  $('followTime').value = '';
+  $('followNote').value = 'สามารถเลื่อนนัดได้ไม่เกิน 2 สัปดาห์';
+  $('approve').checked = true;
+  state.procedures = [{ id:uid(), name:'', totalQty:'', unit:'u', price:'', storedQty:'', bonusStatus:'', areas:[{id:uid(), area:'', qty:'', bonusStatus:''}], remainingQty:'' }];
+  state.recommendations = [];
+  state.discount = '';
+  state.discountBirthday = '';
+  state.discountPoints = '';
+  state.discountText = '';
+  state.autoFillFirstPayment = true;
+  state.payments = [{ id:uid(), amount:'', method:'โอน' }];
+  if($('discount')) $('discount').value = '';
+  renderForm();
+  $('hn').focus();
+}
+
+async function copyJson(){ render(); await navigator.clipboard.writeText($('jsonBox').textContent); setStatus('Copy JSON แล้ว', true); }
+async function send(){
+  render();
+  const url = clean($('webhook').value);
+  if(!url){ setStatus('กรุณาใส่ n8n Webhook URL ก่อน', false); return; }
+  if(!clean($('hn').value)){ setStatus('กรุณาใส่ HN ก่อนส่ง', false); $('hn').focus(); return; }
+  if(!clean($('uid').value)){ setStatus('ยังไม่มี LINE UID ห้ามส่ง เพื่อป้องกันส่งผิดคน — รอ lookup หรือกรอก UID ก่อน', false); $('uid').focus(); return; }
+  const outgoing=data();
+  if(!outgoing.procedures.length&&!outgoing.doctorRecommendations.length){ setStatus('ต้องมีอย่างน้อย 1 รายการหัตถการ หรือ 1 รายการที่คุณหมอแนะนำก่อนส่ง', false); return; }
+  localStorage.setItem('jinsooProcedureWebhookUrl', url);
+  $('sendBtn').disabled = true;
+  $('sendBtn').textContent = 'กำลังส่ง...';
+  try{
+    const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:$('jsonBox').textContent });
+    const text = await res.text();
+    if(res.ok){
+      resetIntakeForm();
+      setStatus(`ส่งสำเร็จและรีเซ็ตฟอร์มแล้ว: HTTP ${res.status}
+${text.slice(0,500)}`, true);
+    } else {
+      setStatus(`ส่งไม่สำเร็จ: HTTP ${res.status}
+${text.slice(0,500)}`, false);
+    }
+  } catch(e){
+    setStatus('ส่งไม่สำเร็จ: ' + e.message, false);
+  } finally {
+    $('sendBtn').disabled = false;
+    $('sendBtn').textContent = 'ส่งเข้า n8n Webhook';
+  }
+}
+
+function setup(){
+  const today = new Date(); $('date').valueAsDate = today;
+  const fd = new Date(today); fd.setDate(fd.getDate() + 28); $('followDate').valueAsDate = fd;
+  const savedWebhook = localStorage.getItem('jinsooProcedureWebhookUrl'); $('webhook').value = savedWebhook || WEBHOOK_URL;
+  $('hn').value = ''; $('uid').value = ''; $('nickname').value = ''; $('realName').value = '';
+  refreshCatalogDropdowns();
+
+  state.procedures = [
+    { id:uid(), name:'Filler E', totalQty:'3', unit:'cc', price:'15000', areas:[{id:uid(), area:'.P.T.Q. ขมับ', qty:'3'}] },
+    { id:uid(), name:'Botox', totalQty:'150', unit:'u', price:'7000', areas:[{id:uid(), area:'ริ้วรอย', qty:'75'}] }
+  ];
+  state.recommendations = [{ id:uid(), name:'Sculptra', totalQty:'1', unit:'ขวด', price:'15000', note:'ช่วยกระตุ้นคอลลาเจนและฟื้นฟูโครงสร้างผิวตามแผนที่คุณหมอประเมิน', areas:[{id:uid(),area:'ทั่วหน้า',qty:'1'}] }];
+  state.discount = '';
+  state.discountBirthday = '';
+  state.discountPoints = '';
+  state.discountText = '';
+  state.autoFillFirstPayment = true;
+  state.payments = [{ id:uid(), amount:'', method:'HD Mall 0% 6 เดือน' }];
+
+  $('procedures').addEventListener('input', handleDynamicInput);
+  $('procedures').addEventListener('change', handleDynamicChange);
+  $('payments').addEventListener('input', handleDynamicInput);
+  $('payments').addEventListener('change', handleDynamicChange);
+  $('recommendations').addEventListener('input', handleDynamicInput);
+  $('recommendations').addEventListener('change', handleDynamicChange);
+  $('recommendations').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b)return; e.preventDefault(); if(b.dataset.removeRec)removeRecommendation(b.dataset.removeRec); if(b.dataset.addRecArea)addRecommendationArea(b.dataset.addRecArea); if(b.dataset.removeRecArea){const [r,a]=b.dataset.removeRecArea.split(':');removeRecommendationArea(r,a);} });
+  $('preview').addEventListener('click',e=>{const b=e.target.closest('[data-preview-page]');if(!b)return;previewPageIndex=Number(b.dataset.previewPage)||0;render();});
+  $('procedures').addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return; e.preventDefault();
+    if(b.dataset.addArea) addArea(b.dataset.addArea);
+    if(b.dataset.removeProc) removeProcedure(b.dataset.removeProc);
+    if(b.dataset.removeArea){ const [p,a] = b.dataset.removeArea.split(':'); removeArea(p,a); }
+  });
+  $('payments').addEventListener('click', e => { const b = e.target.closest('button[data-remove-payment]'); if(b){ e.preventDefault(); removePayment(b.dataset.removePayment); } });
+
+  $('addProcTop').onclick = e => { e.preventDefault(); addProcedure(); };
+  $('parseProcedureBtn').onclick = e => { e.preventDefault(); applyRawProcedureText(); };
+  $('addPayment').onclick = e => { e.preventDefault(); addPayment(); };
+  $('addRecommendation').onclick = e => { e.preventDefault(); addRecommendation(); };
+  $('addProcedureCatalogBtn').onclick = e => { e.preventDefault(); openCatalogModal('procedure'); };
+  $('editProcedureCatalogBtn').onclick = e => { e.preventDefault(); openCatalogModal('procedure', true); };
+  $('addUnitCatalogBtn').onclick = e => { e.preventDefault(); openCatalogModal('unit'); };
+  $('editUnitCatalogBtn').onclick = e => { e.preventDefault(); openCatalogModal('unit', true); };
+  $('addStatusCatalogBtn').onclick = e => { e.preventDefault(); openCatalogModal('status'); };
+  $('addFollowNoteLine').onclick = e => { e.preventDefault(); const el = $('followNote'); el.value += (el.value.endsWith('\n') || !el.value ? '' : '\n'); el.focus(); scheduleRender(); };
+  $('catalogModalClose').onclick = closeCatalogModal;
+  $('catalogModalCancel').onclick = closeCatalogModal;
+  $('catalogModalSave').onclick = e => { e.preventDefault(); saveCatalogModal(); };
+  $('catalogBackdrop').addEventListener('click', e => { if(e.target.id === 'catalogBackdrop') closeCatalogModal(); });
+  $('catalogSavedList').addEventListener('click', e => { const b = e.target.closest('button[data-catalog-delete]'); if(!b) return; e.preventDefault(); const row = b.closest('.catalogSavedRow'); if(row) row.remove(); if(!$('catalogSavedList').querySelector('.catalogSavedRow')) $('catalogSavedList').innerHTML = `<div class="catalogSavedEmpty">ไม่มีรายการเหลือแล้ว กดบันทึกเพื่อล้าง${catalogThaiName(catalogModalMode)}ที่บันทึกไว้</div>`; });
+  $('catalogModalInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); saveCatalogModal(); } });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && $('catalogBackdrop').classList.contains('open')) closeCatalogModal(); });
+  $('previewBtn').onclick = e => { e.preventDefault(); render(); setStatus('อัปเดต Preview แล้ว', true); };
+  $('copyBtn').onclick = e => { e.preventDefault(); copyJson(); };
+  $('toggleJsonBtn').onclick = e => { e.preventDefault(); render(); $('jsonBox').style.display = $('jsonBox').style.display === 'block' ? 'none' : 'block'; };
+  $('sendBtn').onclick = e => { e.preventDefault(); send(); };
+  document.querySelectorAll('[data-open-modal]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); const m = $(btn.dataset.openModal); if(m && m.showModal) m.showModal(); }));
+  document.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); const m = btn.closest('dialog'); if(m) m.close(); render(); }));
+  document.querySelectorAll('dialog.posModal').forEach(m => m.addEventListener('click', e => { if(e.target === m){ m.close(); render(); } }));
+
+  $('realName').addEventListener('input', () => { state.realName = $('realName').value; scheduleRender(); });
+  ['date','followDate','followTime','followNote','approve','webhook'].forEach(id => $(id).addEventListener('input', scheduleRender));
+  $('discount').addEventListener('input', () => { state.discount = $('discount').value; scheduleRender(); });
+  $('discount').addEventListener('change', render);
+  $('uid').addEventListener('input', () => { manualUidTouched = true; scheduleRender(); });
+  $('nickname').addEventListener('input', () => { manualNicknameTouched = true; scheduleRender(); });
+  $('hn').addEventListener('input', onHNChanged);
+  $('hn').addEventListener('change', lookupHN);
+  $('hn').addEventListener('blur', lookupHN);
+
+  renderForm();
+}
+setup();
+</script></body></html>
